@@ -1,0 +1,1592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Order Management Systems - An Executive Engineering Handbook</title>
+  <style>
+    @page { size: Letter; margin: 0.72in 0.7in 0.72in; }
+    @page :first { margin: 0; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif; color: #182235; background: #e8eef0; }
+    body { margin: 0; font-size: 10.2pt; line-height: 1.5; }
+    .cover { min-height: 100vh; padding: clamp(2rem, 8vw, 7rem); color: #fff; background: radial-gradient(circle at 80% 18%, rgba(80,225,201,.25), transparent 28%), repeating-linear-gradient(90deg, transparent 0 79px, rgba(255,255,255,.035) 80px), linear-gradient(145deg, #081f35 0%, #0d4262 58%, #176e73 100%); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; }
+    .cover::after { content: "OMS"; position: absolute; right: -2vw; bottom: -11vw; font-family: "Iowan Old Style", Baskerville, Georgia, serif; font-size: min(44vw, 34rem); font-weight: 700; line-height: .8; color: rgba(255,255,255,.035); pointer-events: none; }
+    .cover-kicker { font-size: 11pt; letter-spacing: .18em; text-transform: uppercase; color: #9fe5dc; font-weight: 700; }
+    .cover h1 { margin: 0; max-width: 11ch; font-family: "Iowan Old Style", Baskerville, Georgia, serif; font-size: clamp(3.4rem, 9vw, 8.5rem); line-height: .92; letter-spacing: -.045em; color: #fff; position: relative; z-index: 1; }
+    .cover h2 { margin: .26in 0 0; max-width: 6.8in; font-size: 17pt; line-height: 1.35; color: #d7eef4; font-weight: 500; }
+    .cover-foot { border-top: 1px solid rgba(255,255,255,.35); padding-top: .2in; font-size: 10pt; color: #d7eef4; }
+    .toc { max-width: 64rem; margin: 0 auto; padding: clamp(3rem, 7vw, 6rem) clamp(1.2rem, 4vw, 3rem); background: #f9fbfa; }
+    .toc h1 { margin-top: 0; color: #0c4568; font-size: 27pt; }
+    .toc p { color: #596777; margin-bottom: .32in; }
+    .toc ol { list-style: none; padding: 0; margin: 0; }
+    .toc li { margin: 0 0 .17in; }
+    .toc a { color: #15324c; text-decoration: none; display: flex; align-items: baseline; font-size: 12pt; font-weight: 650; }
+    .toc-dots { flex: 1; border-bottom: 1px dotted #91a0ac; margin: 0 .1in .05in; }
+    .toc-number { color: #167b83; font-variant-numeric: tabular-nums; }
+    main { max-width: 64rem; margin: 0 auto; background: #fff; box-shadow: 0 30px 80px rgba(10,34,48,.12); }
+    .chapter { padding: clamp(2.4rem, 6vw, 5rem) clamp(1.25rem, 6vw, 5.5rem); border-top: 1px solid #d7e0e3; }
+    .chapter:first-of-type { page-break-before: auto; }
+    h1, h2, h3, h4 { break-after: avoid-page; page-break-after: avoid; color: #103e5d; line-height: 1.2; }
+    h1 { margin: .32in 0 .13in; font-family: "Iowan Old Style", Baskerville, Georgia, serif; font-size: 21pt; border-bottom: 2px solid #54a9a5; padding-bottom: .07in; }
+    article > h1:first-child { margin-top: 0; font-size: 13pt; letter-spacing: .12em; text-transform: uppercase; border: 0; color: #178086; }
+    h2 { margin: .25in 0 .09in; font-size: 15.5pt; }
+    h3 { margin: .2in 0 .07in; font-size: 12.5pt; color: #38596d; }
+    p { margin: .07in 0 .12in; orphans: 3; widows: 3; }
+    ul, ol { margin: .07in 0 .16in; padding-left: .28in; }
+    li { margin: .035in 0; }
+    blockquote { margin: .18in 0; padding: .12in .18in; border-left: 4px solid #38a6a3; background: #eef7f6; color: #294859; }
+    blockquote p { margin: 0; }
+    table { width: 100%; border-collapse: collapse; margin: .15in 0 .22in; font-size: 9pt; break-inside: avoid; }
+    th { background: #174f70; color: white; text-align: left; }
+    th, td { border: 1px solid #b8c7d0; padding: .065in .075in; vertical-align: top; }
+    tr:nth-child(even) td { background: #f3f7f9; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #f2f5f7; border: 1px solid #d3dde3; border-radius: 5px; padding: .12in; font-size: 8.7pt; line-height: 1.35; break-inside: avoid; }
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    .mermaid { display: flex; justify-content: center; margin: .18in auto .25in; break-inside: avoid; page-break-inside: avoid; max-width: 100%; }
+    .mermaid svg { max-width: 100% !important; max-height: 7.2in; height: auto !important; }
+    hr { border: 0; border-top: 1px solid #c9d6dc; margin: .25in 0; }
+    a { color: #086b78; }
+    @media screen and (min-width: 1100px) {
+      body::before { content: "ORDER / FLOW / PROMISE"; position: fixed; left: 1rem; top: 50%; writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg); font-size: .65rem; letter-spacing: .24em; color: #6a7d88; z-index: -1; }
+    }
+    @media print {
+      html { background: white; }
+      .cover { height: 11in; min-height: 0; margin: -0.72in -0.7in 0; padding: 1.05in .85in; page-break-after: always; }
+      .toc { page-break-after: always; padding-top: .08in; }
+      main { max-width: none; box-shadow: none; }
+      .chapter { page-break-before: always; padding: 0; border: 0; }
+      a { text-decoration: none; }
+      .chapter { counter-increment: chapter; }
+    }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div><div class="cover-kicker">Executive Engineering Handbook</div></div>
+    <div><h1>Order Management Systems</h1><h2>Foundations, omnichannel fulfillment, inventory, architecture, platforms, and executive interview preparation</h2></div>
+    <div class="cover-foot">Seven-part consolidated edition</div>
+  </section>
+  <nav class="toc" aria-label="Chapter index">
+    <h1>Chapter Index</h1>
+    <p>Select a chapter title in a PDF viewer to jump directly to that chapter.</p>
+    <ol><li><a href="#chapter-1"><span class="toc-part">Part 1 --- Foundations of Modern Order Management</span><span class="toc-dots"></span><span class="toc-number">1</span></a></li>
+<li><a href="#chapter-2"><span class="toc-part">Part 2 -- Omnichannel Fulfillment Workflows</span><span class="toc-dots"></span><span class="toc-number">2</span></a></li>
+<li><a href="#chapter-3"><span class="toc-part">Part 3 -- Inventory, ATP, Routing &amp; Order Orchestration</span><span class="toc-dots"></span><span class="toc-number">3</span></a></li>
+<li><a href="#chapter-4"><span class="toc-part">Part 4 -- Technical Architecture for Enterprise OMS</span><span class="toc-dots"></span><span class="toc-number">4</span></a></li>
+<li><a href="#chapter-5"><span class="toc-part">Part 5 -- Blue Yonder OMS Deep Dive</span><span class="toc-dots"></span><span class="toc-number">5</span></a></li>
+<li><a href="#chapter-6"><span class="toc-part">Part 6 -- Comparing Blue Yonder, IBM Sterling, Manhattan Active Omni &amp; Salesforce OMS</span><span class="toc-dots"></span><span class="toc-number">6</span></a></li>
+<li><a href="#chapter-7"><span class="toc-part">Part 7 -- Executive Interview Guide &amp; Glossary</span><span class="toc-dots"></span><span class="toc-number">7</span></a></li></ol>
+  </nav>
+  <main><article class="chapter" id="chapter-1"><h1>Order Management Systems</h1>
+<h2>An Executive Engineering Handbook</h2>
+<h3>Part 1 --- Foundations of Modern Order Management</h3>
+<blockquote>
+<p><em>&quot;An Order Management System is not a database of orders. It is a
+distributed decision engine that continuously balances customer
+promises, inventory, operational cost, and fulfillment capacity in
+real time.&quot;</em></p>
+</blockquote>
+<h1>1. Why Order Management Exists</h1>
+<p>Twenty years ago, retail fulfillment was simple.</p>
+<pre><code class="language-text">Customer
+    ↓
+Store
+</code></pre>
+<p>Or, for e-commerce,</p>
+<pre><code class="language-text">Customer
+    ↓
+Warehouse
+</code></pre>
+<p>Today, every order might be fulfilled from dozens or hundreds of
+possible locations.</p>
+<pre><code class="language-text">            Vendor
+
+               │
+
+DC ─────── OMS ─────── Store
+
+               │
+
+      Marketplace Inventory
+
+               │
+
+     Future Inbound Inventory
+</code></pre>
+<p>The explosion of omnichannel fulfillment fundamentally changed the
+problem.</p>
+<p>The question is no longer:</p>
+<blockquote>
+<p><strong>&quot;Do we have inventory?&quot;</strong></p>
+</blockquote>
+<p>Instead:</p>
+<blockquote>
+<p><strong>&quot;Where should this specific unit come from, and can we confidently
+promise it to the customer?&quot;</strong></p>
+</blockquote>
+<p>That sounds like a small distinction.</p>
+<p>It isn&#39;t.</p>
+<h1>OMS is a Decision Engine</h1>
+<p>The OMS exists to make decisions:</p>
+<ol>
+<li>Can I sell it?</li>
+<li>Can I promise it?</li>
+<li>Where should it ship from?</li>
+<li>What happens if reality changes?</li>
+<li>How do I maximize profit?</li>
+</ol>
+<h1>2. OMS vs WMS vs ERP vs Inventory</h1>
+<h2>ERP</h2>
+<p>Owns accounting truth, purchasing, finance, vendors, and invoices.</p>
+<h2>WMS</h2>
+<p>Executes fulfillment: - Pick - Pack - Ship</p>
+<h2>Inventory Service</h2>
+<p>Maintains real-time inventory states: - On hand - Reserved - Safety
+stock - Damaged - Future receipts</p>
+<h2>OMS</h2>
+<p>Consumes inventory and decides where and how orders should be fulfilled.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCgpDdXN0b21lciAtLT4gQ29tbWVyY2UKQ29tbWVyY2UgLS0+IE9NUwpPTVMgLS0+IEludmVudG9yeQpPTVMgLS0+IFdNUwpPTVMgLS0+IEVSUApPTVMgLS0+IFRNUwpJbnZlbnRvcnkgLS0+IE9NUwpXTVMgLS0+IE9NUw=="></div>
+
+<h1>3. Distributed Order Management (DOM)</h1>
+<p>DOM allows fulfillment from many possible nodes:</p>
+<ul>
+<li>Distribution Centers</li>
+<li>Stores</li>
+<li>Vendors</li>
+<li>Marketplace</li>
+<li>Drop Ship</li>
+<li>Returns Centers</li>
+</ul>
+<h1>4. Inventory Is Not a Number</h1>
+<p>Available inventory is derived from inventory state, not simply on-hand
+quantity.</p>
+<p>Example:</p>
+<p>  State             Qty</p>
+<hr>
+<p>  On Hand            15
+  Damaged            -2
+  Reserved           -3
+  Safety Stock       -4
+  Employee Hold      -1
+  Picked             -2</p>
+<p>Available = <strong>3</strong></p>
+<div class="mermaid-source" data-code="c3RhdGVEaWFncmFtLXYyCk9uSGFuZCAtLT4gUmVzZXJ2ZWQKUmVzZXJ2ZWQgLS0+IEFsbG9jYXRlZApBbGxvY2F0ZWQgLS0+IFBpY2tlZApQaWNrZWQgLS0+IFBhY2tlZApQYWNrZWQgLS0+IFNoaXBwZWQKU2hpcHBlZCAtLT4gRGVsaXZlcmVkCkRlbGl2ZXJlZCAtLT4gUmV0dXJuZWQKUmV0dXJuZWQgLS0+IFJlc3RvY2tlZApSZXR1cm5lZCAtLT4gTGlxdWlkYXRlZA=="></div>
+
+<h1>5. Real-Time Inventory</h1>
+<div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCnBhcnRpY2lwYW50IFBPUwpwYXJ0aWNpcGFudCBJbnZlbnRvcnkKcGFydGljaXBhbnQgT01TCnBhcnRpY2lwYW50IFdlYnNpdGUKClBPUy0+PkludmVudG9yeTogU29sZCBJdGVtCkludmVudG9yeS0+Pk9NUzogSW52ZW50b3J5Q2hhbmdlZApPTVMtPj5XZWJzaXRlOiBBVFAgVXBkYXRlZA=="></div>
+
+<p>Inventory updates should propagate in well under one second.</p>
+<h1>6. Available-to-Promise (ATP)</h1>
+<p>ATP is inventory that can be confidently promised after accounting for
+reservations, safety stock, business rules, and operational constraints.</p>
+<p>Soft Reservation: - Inventory protected - Fulfillment node not yet
+chosen</p>
+<p>Hard Reservation: - Specific node selected - Inventory committed</p>
+<p>Allocation: - OMS instructs execution systems to begin fulfillment</p>
+<h2>Executive Takeaways</h2>
+<ul>
+<li>OMS is a distributed decision engine.</li>
+<li>Inventory, ATP, routing, and execution are separate concerns.</li>
+<li>Event-driven architecture is foundational to modern omnichannel
+retail.</li>
+</ul>
+</article>
+<article class="chapter" id="chapter-2"><h1>Order Management Systems</h1>
+<h1>Part 2 -- Omnichannel Fulfillment Workflows</h1>
+<h2>Executive Summary</h2>
+<p>Modern omnichannel retail is about optimizing <em>where</em> work is performed
+rather than simply fulfilling an order. The OMS coordinates decisions
+while execution systems (WMS, store applications, TMS) perform the work.</p>
+<hr>
+<h1>BOPIS (Buy Online, Pick Up In Store)</h1>
+<h2>Business Goal</h2>
+<p>Provide near-immediate fulfillment while leveraging store inventory.</p>
+<div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCnBhcnRpY2lwYW50IEN1c3RvbWVyCnBhcnRpY2lwYW50IENvbW1lcmNlCnBhcnRpY2lwYW50IE9NUwpwYXJ0aWNpcGFudCBJbnZlbnRvcnkKcGFydGljaXBhbnQgU3RvcmUKCkN1c3RvbWVyLT4+Q29tbWVyY2U6IFN1Ym1pdCBPcmRlcgpDb21tZXJjZS0+Pk9NUzogQ2hlY2sgQVRQCk9NUy0+PkludmVudG9yeTogUmVzZXJ2ZSBJbnZlbnRvcnkKT01TLT4+U3RvcmU6IENyZWF0ZSBQaWNrIFRhc2sKU3RvcmUtLT4+T01TOiBQaWNrIENvbmZpcm1lZApPTVMtLT4+Q3VzdG9tZXI6IFJlYWR5IGZvciBQaWNrdXA="></div>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Reserve inventory immediately after checkout.</li>
+<li>Enforce pick SLAs.</li>
+<li>Expire stale reservations.</li>
+<li>Notify customers automatically.</li>
+<li>Continuously monitor inventory accuracy.</li>
+</ul>
+<h2>Common Failure Modes</h2>
+<ul>
+<li>Phantom inventory</li>
+<li>Missed pick windows</li>
+<li>Customer never arrives</li>
+<li>Item damaged before pickup</li>
+</ul>
+<hr>
+<h1>Ship From Store (SFS)</h1>
+<p>SFS turns retail stores into miniature fulfillment centers.</p>
+<p>Routing considerations:</p>
+<ul>
+<li>Distance to customer</li>
+<li>Shipping cost</li>
+<li>Store labor capacity</li>
+<li>Carrier pickup cutoff</li>
+<li>Inventory confidence</li>
+<li>Margin impact</li>
+</ul>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECk9yZGVyIC0tPiBPTVMKT01TIC0tPiBTY29yZU5vZGVzClNjb3JlTm9kZXMgLS0+IFN0b3JlQQpTY29yZU5vZGVzIC0tPiBTdG9yZUIKU2NvcmVOb2RlcyAtLT4gREMKU3RvcmVBIC0tPiBXaW5uZXIKU3RvcmVCIC0tPiBXaW5uZXIKREMgLS0+IFdpbm5lcgpXaW5uZXIgLS0+IEZ1bGZpbGxtZW50"></div>
+
+<h2>Executive Considerations</h2>
+<p>High SFS volume changes store labor planning, packaging requirements,
+and inventory accuracy expectations.</p>
+<hr>
+<h1>Ship to Store</h1>
+<p>Instead of shipping to the customer:</p>
+<p>Customer → Store</p>
+<p>Advantages:</p>
+<ul>
+<li>Lower last-mile cost</li>
+<li>Increased store traffic</li>
+<li>Easier returns</li>
+<li>Better customer flexibility</li>
+</ul>
+<hr>
+<h1>Endless Aisle</h1>
+<p>A customer standing in Store A purchases inventory held elsewhere.</p>
+<pre><code class="language-text">Customer
+   ↓
+Store Associate
+   ↓
+Commerce
+   ↓
+OMS
+   ↓
+Remote DC
+</code></pre>
+<p>Critical requirement:</p>
+<p>Inventory visibility across the enterprise.</p>
+<hr>
+<h1>Curbside Pickup</h1>
+<p>Adds additional orchestration.</p>
+<div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCnBhcnRpY2lwYW50IEFwcApwYXJ0aWNpcGFudCBPTVMKcGFydGljaXBhbnQgU3RvcmUKcGFydGljaXBhbnQgQXNzb2NpYXRlCgpBcHAtPj5PTVM6IEN1c3RvbWVyIEFycml2aW5nCk9NUy0+PlN0b3JlOiBQcmVwYXJlIE9yZGVyClN0b3JlLT4+QXNzb2NpYXRlOiBCcmluZyBPcmRlciBPdXRzaWRlCkFzc29jaWF0ZS0tPj5BcHA6IEhhbmRvZmYgQ29tcGxldGU="></div>
+
+<p>Additional concerns:</p>
+<ul>
+<li>Parking stall management</li>
+<li>Geofencing</li>
+<li>Identity verification</li>
+<li>Fraud prevention</li>
+</ul>
+<hr>
+<h1>Split Shipments</h1>
+<p>OMS may intentionally split fulfillment.</p>
+<p>Example:</p>
+<p>  SKU      Node</p>
+<hr>
+<p>  Shoes    Store 114
+  Jacket   DC West
+  Hat      Vendor</p>
+<p>Tradeoffs:</p>
+<p>Pros</p>
+<ul>
+<li>Faster delivery</li>
+<li>Better inventory utilization</li>
+</ul>
+<p>Cons</p>
+<ul>
+<li>Increased shipping cost</li>
+<li>Poor customer experience</li>
+<li>Multiple tracking numbers</li>
+</ul>
+<p>Modern routing engines apply penalties to unnecessary splits.</p>
+<hr>
+<h1>Backorders</h1>
+<p>When inventory is unavailable today but expected later.</p>
+<p>OMS evaluates:</p>
+<ul>
+<li>Future receipts</li>
+<li>Vendor lead time</li>
+<li>Customer SLA</li>
+<li>Cancellation risk</li>
+</ul>
+<hr>
+<h1>Reverse Logistics</h1>
+<p>Returns are a supply-chain optimization problem.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFREClJldHVybiAtLT4gSW5zcGVjdApJbnNwZWN0IC0tPiBSZXN0b2NrCkluc3BlY3QgLS0+IFJlZnVyYmlzaApJbnNwZWN0IC0tPiBPdXRsZXQKSW5zcGVjdCAtLT4gTGlxdWlkYXRlCkluc3BlY3QgLS0+IERlc3Ryb3k="></div>
+
+<p>Decision factors:</p>
+<ul>
+<li>Product condition</li>
+<li>Transportation cost</li>
+<li>Expected resale value</li>
+<li>Seasonality</li>
+<li>Local demand</li>
+</ul>
+<hr>
+<h1>Inventory Accuracy</h1>
+<p>Omnichannel success depends on trustworthy inventory.</p>
+<p>Improvement techniques:</p>
+<ul>
+<li>Cycle counting</li>
+<li>RFID</li>
+<li>Computer vision</li>
+<li>Confidence scoring</li>
+<li>Pick confirmation events</li>
+</ul>
+<hr>
+<h1>Exception Handling</h1>
+<p>Every OMS should continuously re-plan.</p>
+<p>Examples:</p>
+<ul>
+<li>Store closed unexpectedly</li>
+<li>Inventory mismatch</li>
+<li>Carrier delay</li>
+<li>Weather event</li>
+<li>Customer address change</li>
+<li>Failed payment</li>
+</ul>
+<p>Rather than failing an order, mature OMS platforms attempt automatic
+re-sourcing before human intervention.</p>
+<hr>
+<h1>KPIs</h1>
+<p>Engineering leaders typically monitor:</p>
+<p>  Metric                 Why It Matters</p>
+<hr>
+<p>  Fill Rate              Customer satisfaction
+  Perfect Order %        Overall execution quality
+  BOPIS Ready Time       Store efficiency
+  Inventory Accuracy     Routing quality
+  Split Shipment %       Cost control
+  Order Cycle Time       End-to-end speed
+  Cancel Rate            ATP quality
+  Return-to-Stock Time   Working capital</p>
+<hr>
+<h1>Executive Takeaways</h1>
+<ul>
+<li>Omnichannel fulfillment is fundamentally an optimization problem.</li>
+<li>BOPIS, SFS, Ship-to-Store, and Curbside are variations of the same
+orchestration model.</li>
+<li>OMS owns decisions; execution systems perform work.</li>
+<li>Inventory accuracy is the single largest predictor of omnichannel
+success.</li>
+<li>Returns should be optimized as inventory assets, not merely refunds.</li>
+</ul>
+</article>
+<article class="chapter" id="chapter-3"><h1>Order Management Systems</h1>
+<h1>Part 3 -- Inventory, ATP, Routing &amp; Order Orchestration</h1>
+<h2>Executive Summary</h2>
+<p>The heart of every modern OMS is the continuous balancing of <strong>customer
+promises</strong>, <strong>inventory health</strong>, <strong>operational cost</strong>, and
+<strong>fulfillment capacity</strong>. This chapter explores the core decision models
+that distinguish enterprise-grade OMS platforms from simple order
+processing systems.</p>
+<hr>
+<h1>1. Inventory as a State Machine</h1>
+<p>Inventory is never a single number. A sellable quantity is derived from
+multiple inventory states.</p>
+<div class="mermaid-source" data-code="c3RhdGVEaWFncmFtLXYyClsqXSAtLT4gT25IYW5kCk9uSGFuZCAtLT4gU29mdFJlc2VydmVkClNvZnRSZXNlcnZlZCAtLT4gSGFyZFJlc2VydmVkCkhhcmRSZXNlcnZlZCAtLT4gQWxsb2NhdGVkCkFsbG9jYXRlZCAtLT4gUGlja2VkClBpY2tlZCAtLT4gUGFja2VkClBhY2tlZCAtLT4gU2hpcHBlZApTaGlwcGVkIC0tPiBEZWxpdmVyZWQKRGVsaXZlcmVkIC0tPiBSZXR1cm5lZApSZXR1cm5lZCAtLT4gUmVzdG9ja2VkClJldHVybmVkIC0tPiBMaXF1aWRhdGVk"></div>
+
+<p>Typical inventory buckets:</p>
+<p>  State            Description</p>
+<hr>
+<p>  On Hand          Physically present
+  Safety Stock     Protected inventory
+  Soft Reserved    Promise made, node undecided
+  Hard Reserved    Node selected
+  Allocated        Released for execution
+  Damaged          Unsellable
+  In Transit       Moving between nodes
+  Future Receipt   Expected inbound supply</p>
+<hr>
+<h1>2. Available-to-Promise (ATP)</h1>
+<p>ATP answers:</p>
+<blockquote>
+<p>Can we confidently promise this item to this customer now?</p>
+</blockquote>
+<p>Conceptually:</p>
+<pre><code class="language-text">ATP =
+On Hand
+- Hard Reservations
+- Safety Stock
+- Operational Constraints
++ Eligible Future Receipts
+</code></pre>
+<p>Good ATP engines evaluate:</p>
+<ul>
+<li>Inventory availability</li>
+<li>Store operating hours</li>
+<li>Carrier cutoff times</li>
+<li>Fulfillment capacity</li>
+<li>Business rules</li>
+<li>Customer priority</li>
+</ul>
+<p>ATP is recalculated continuously as events arrive.</p>
+<hr>
+<h1>3. Capable-to-Promise (CTP)</h1>
+<p>CTP extends ATP by considering production or replenishment capability.</p>
+<p>Example:</p>
+<ul>
+<li>ATP = 0</li>
+<li>Factory can produce in 3 days</li>
+<li>Vendor can replenish in 5 days</li>
+</ul>
+<p>OMS may still accept the order with a revised promise date.</p>
+<hr>
+<h1>4. Soft vs Hard Reservations</h1>
+<h2>Soft Reservation</h2>
+<p>The customer has a promise but sourcing remains flexible.</p>
+<p>Benefits:</p>
+<ul>
+<li>Better optimization</li>
+<li>Easier rebalancing</li>
+<li>Reduced early commitment</li>
+</ul>
+<h2>Hard Reservation</h2>
+<p>Specific inventory at a specific node is committed.</p>
+<p>Benefits:</p>
+<ul>
+<li>Higher execution certainty</li>
+<li>Faster release to fulfillment</li>
+</ul>
+<p>Tradeoff: reduced flexibility.</p>
+<hr>
+<h1>5. Allocation</h1>
+<p>Allocation tells an execution system to begin work.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCk9yZGVyIC0tPiBPTVMKT01TIC0tPiBSZXNlcnZlClJlc2VydmUgLS0+IEFsbG9jYXRlCkFsbG9jYXRlIC0tPiBXTVMKV01TIC0tPiBQaWNr"></div>
+
+<p>Reservation protects inventory. Allocation starts fulfillment.</p>
+<hr>
+<h1>6. Distributed Order Management (DOM)</h1>
+<p>DOM evaluates every eligible fulfillment node.</p>
+<p>Inputs include:</p>
+<ul>
+<li>Inventory</li>
+<li>Labor</li>
+<li>Capacity</li>
+<li>Distance</li>
+<li>Carrier schedules</li>
+<li>Inventory confidence</li>
+<li>Business priorities</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>Selected fulfillment node</li>
+<li>Customer promise</li>
+<li>Cost estimate</li>
+</ul>
+<hr>
+<h1>7. Routing Algorithms</h1>
+<p>Routing is a multi-objective optimization problem.</p>
+<p>Illustrative scoring model:</p>
+<pre><code class="language-text">Score =
+Shipping Cost
++ Labor Cost
++ Split Shipment Penalty
++ Markdown Risk
++ Capacity Penalty
+- Customer Priority Bonus
+</code></pre>
+<p>Lowest valid score wins.</p>
+<hr>
+<h1>8. Inventory Segmentation (Inventory Fencing)</h1>
+<p>Not every unit should be available to every customer.</p>
+<p>Examples:</p>
+<ul>
+<li>Reserve launch inventory for loyalty members</li>
+<li>Protect store presentation minimums</li>
+<li>Reserve wholesale allocations</li>
+<li>Hold inventory for BOPIS</li>
+</ul>
+<p>Segmentation improves strategic inventory utilization.</p>
+<hr>
+<h1>9. Inventory Confidence</h1>
+<p>Reported inventory and trustworthy inventory are different.</p>
+<p>Confidence inputs:</p>
+<ul>
+<li>Cycle count frequency</li>
+<li>Shrink history</li>
+<li>RFID coverage</li>
+<li>Recent sales</li>
+<li>Pick success rate</li>
+</ul>
+<p>OMS may intentionally avoid low-confidence nodes.</p>
+<hr>
+<h1>10. Rebalancing &amp; Re-sourcing</h1>
+<p>When conditions change after an order is accepted:</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECkludmVudG9yeUxvc3MgLS0+IE9NUwpPTVMgLS0+IFJlZXZhbHVhdGUKUmVldmFsdWF0ZSAtLT4gTmV3Tm9kZQpOZXdOb2RlIC0tPiBVcGRhdGVQcm9taXNl"></div>
+
+<p>Triggers include:</p>
+<ul>
+<li>Inventory adjustment</li>
+<li>Store closure</li>
+<li>Carrier disruption</li>
+<li>Failed pick</li>
+<li>Weather</li>
+</ul>
+<p>Modern systems attempt automatic recovery before canceling.</p>
+<hr>
+<h1>11. Event Model</h1>
+<p>Typical events:</p>
+<pre><code class="language-text">OrderCreated
+InventoryAdjusted
+ReservationCreated
+ReservationReleased
+AllocationCreated
+PickCompleted
+ShipmentCreated
+DeliveryConfirmed
+ReturnReceived
+</code></pre>
+<p>These events are generally immutable and consumed asynchronously by
+downstream services.</p>
+<hr>
+<h1>12. Order Lifecycle</h1>
+<div class="mermaid-source" data-code="c3RhdGVEaWFncmFtLXYyCkNyZWF0ZWQgLS0+IFJlc2VydmVkClJlc2VydmVkIC0tPiBBbGxvY2F0ZWQKQWxsb2NhdGVkIC0tPiBQaWNrZWQKUGlja2VkIC0tPiBQYWNrZWQKUGFja2VkIC0tPiBTaGlwcGVkClNoaXBwZWQgLS0+IERlbGl2ZXJlZApEZWxpdmVyZWQgLS0+IENsb3NlZApEZWxpdmVyZWQgLS0+IFJldHVybmVkClJldHVybmVkIC0tPiBSZWZ1bmRlZA=="></div>
+
+<p>OMS owns lifecycle state and orchestration while execution systems own
+operational work.</p>
+<hr>
+<h1>13. Executive Metrics</h1>
+<p>Important KPIs:</p>
+<p>  Metric                Why it Matters</p>
+<hr>
+<p>  ATP Accuracy          Promise quality
+  Fill Rate             Service level
+  Cancel Rate           Inventory quality
+  Inventory Accuracy    Routing confidence
+  Split Shipment %      Cost efficiency
+  Order Cycle Time      Customer experience
+  Re-source Success %   Operational resilience</p>
+<hr>
+<h1>Interview Talking Points</h1>
+<p>A strong engineering leader should emphasize:</p>
+<ul>
+<li>ATP is a business decision, not merely an inventory lookup.</li>
+<li>Reservations, allocation, and execution are distinct lifecycle
+stages.</li>
+<li>Routing is a constrained optimization problem balancing customer
+promise, cost, and inventory health.</li>
+<li>High-quality inventory signals matter more than sophisticated
+optimization on poor data.</li>
+<li>Event-driven architectures enable continuous re-planning instead of
+static order processing.</li>
+</ul>
+</article>
+<article class="chapter" id="chapter-4"><h1>Order Management Systems</h1>
+<h1>Part 4 -- Technical Architecture for Enterprise OMS</h1>
+<h2>Executive Summary</h2>
+<p>Modern Order Management Systems are distributed, event-driven platforms.
+They are designed to make high-value decisions in milliseconds while
+coordinating dozens of independently deployed services. This chapter
+focuses on the engineering patterns used by Blue Yonder, Manhattan, IBM
+Sterling, and large in-house OMS implementations.</p>
+<hr>
+<h1>1. Architectural Principles</h1>
+<p>A modern OMS should be:</p>
+<ul>
+<li>Event driven</li>
+<li>Loosely coupled</li>
+<li>Horizontally scalable</li>
+<li>Fault tolerant</li>
+<li>API first</li>
+<li>Cloud native</li>
+<li>Observable</li>
+<li>Eventually consistent</li>
+</ul>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkNvbW1lcmNlIC0tPiBBUEkKQVBJIC0tPiBPTVMKT01TIC0tPiBJbnZlbnRvcnkKT01TIC0tPiBSb3V0aW5nCk9NUyAtLT4gQVRQCk9NUyAtLT4gT3JjaGVzdHJhdGlvbgpPcmNoZXN0cmF0aW9uIC0tPiBXTVMKT3JjaGVzdHJhdGlvbiAtLT4gVE1TCkludmVudG9yeSAtLT4gS2Fma2EKV01TIC0tPiBLYWZrYQpLYWZrYSAtLT4gT01T"></div>
+
+<hr>
+<h1>2. Domain Decomposition</h1>
+<p>Successful OMS implementations separate business capabilities into
+independently deployable services.</p>
+<p>  Service             Responsibility</p>
+<hr>
+<p>  Order Service       Order lifecycle
+  Inventory Service   Enterprise inventory picture
+  ATP Service         Promise calculations
+  Routing Service     Fulfillment optimization
+  Orchestration       Long-running workflows
+  Notification        Customer communication
+  Returns             Reverse logistics</p>
+<p>This allows each service to scale independently.</p>
+<hr>
+<h1>3. Event-Driven Architecture</h1>
+<p>Every business action emits immutable events.</p>
+<pre><code class="language-text">OrderCreated
+InventoryAdjusted
+ReservationCreated
+AllocationCreated
+PickCompleted
+ShipmentCreated
+DeliveryConfirmed
+ReturnReceived
+RefundIssued
+</code></pre>
+<p>Publish events rather than invoking downstream systems synchronously
+wherever practical.</p>
+<p>Benefits:</p>
+<ul>
+<li>Loose coupling</li>
+<li>Replay</li>
+<li>Audit trail</li>
+<li>Independent deployments</li>
+<li>Better resiliency</li>
+</ul>
+<hr>
+<h1>4. Kafka as the Enterprise Backbone</h1>
+<p>Kafka is frequently used as the enterprise event bus.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFREClBPUyAtLT4gS2Fma2EKQ29tbWVyY2UgLS0+IEthZmthCldNUyAtLT4gS2Fma2EKRVJQIC0tPiBLYWZrYQpJbnZlbnRvcnkgLS0+IEthZmthCgpLYWZrYSAtLT4gT01TCkthZmthIC0tPiBBbmFseXRpY3MKS2Fma2EgLS0+IFJlcGxlbmlzaG1lbnQKS2Fma2EgLS0+IE5vdGlmaWNhdGlvbnM="></div>
+
+<p>Typical topics:</p>
+<ul>
+<li>inventory-events</li>
+<li>order-events</li>
+<li>shipment-events</li>
+<li>returns-events</li>
+<li>customer-events</li>
+</ul>
+<p>Good partition keys often include Order ID or Inventory Location.</p>
+<hr>
+<h1>5. Eventual Consistency</h1>
+<p>Enterprise OMS platforms rarely use distributed transactions.</p>
+<p>Instead:</p>
+<pre><code class="language-text">Customer Order
+
+↓
+
+Order Accepted
+
+↓
+
+Reservation Event
+
+↓
+
+Inventory Updated
+
+↓
+
+Notification Sent
+</code></pre>
+<p>Every service reaches the correct state independently.</p>
+<p>Interview phrase:</p>
+<blockquote>
+<p>Strong consistency is reserved for the smallest possible boundary.</p>
+</blockquote>
+<hr>
+<h1>6. Saga Pattern</h1>
+<p>Order fulfillment spans multiple services.</p>
+<div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCnBhcnRpY2lwYW50IENvbW1lcmNlCnBhcnRpY2lwYW50IE9NUwpwYXJ0aWNpcGFudCBJbnZlbnRvcnkKcGFydGljaXBhbnQgV01TCnBhcnRpY2lwYW50IFBheW1lbnQKCkNvbW1lcmNlLT4+T01TOiBDcmVhdGUgT3JkZXIKT01TLT4+UGF5bWVudDogQXV0aG9yaXplCk9NUy0+PkludmVudG9yeTogUmVzZXJ2ZQpPTVMtPj5XTVM6IEFsbG9jYXRlCgphbHQgUmVzZXJ2YXRpb24gRmFpbGVkCk9NUy0+PlBheW1lbnQ6IFJldmVyc2UgQXV0aG9yaXphdGlvbgplbmQ="></div>
+
+<p>Compensating actions replace distributed rollback.</p>
+<hr>
+<h1>7. CQRS</h1>
+<p>Command Query Responsibility Segregation is common.</p>
+<p>Commands:</p>
+<ul>
+<li>Create Order</li>
+<li>Reserve Inventory</li>
+<li>Allocate</li>
+</ul>
+<p>Queries:</p>
+<ul>
+<li>Order Status</li>
+<li>ATP</li>
+<li>Inventory Availability</li>
+</ul>
+<p>Benefits:</p>
+<ul>
+<li>Independent scaling</li>
+<li>Optimized read models</li>
+<li>Lower query latency</li>
+</ul>
+<hr>
+<h1>8. Idempotency</h1>
+<p>Consumers must tolerate duplicate messages.</p>
+<p>Example:</p>
+<pre><code>ShipmentCreated
+
+received twice
+</code></pre>
+<p>The outcome should remain identical.</p>
+<p>Techniques:</p>
+<ul>
+<li>Idempotency keys</li>
+<li>Version numbers</li>
+<li>Upsert semantics</li>
+<li>Deduplication tables</li>
+</ul>
+<hr>
+<h1>9. API Design</h1>
+<p>Most OMS platforms expose:</p>
+<ul>
+<li>REST APIs</li>
+<li>Event streams</li>
+<li>Webhooks</li>
+<li>Bulk import/export</li>
+</ul>
+<p>Example resources:</p>
+<pre><code>POST /orders
+GET /orders/{id}
+POST /reservations
+POST /returns
+GET /inventory
+</code></pre>
+<p>Avoid exposing internal workflow state directly.</p>
+<hr>
+<h1>10. Caching</h1>
+<p>ATP and inventory are queried heavily.</p>
+<p>Common caches:</p>
+<ul>
+<li>Product metadata</li>
+<li>Inventory snapshots</li>
+<li>Store metadata</li>
+<li>Carrier schedules</li>
+</ul>
+<p>Never treat caches as the source of truth.</p>
+<hr>
+<h1>11. Observability</h1>
+<p>Minimum production telemetry:</p>
+<p>Metrics</p>
+<ul>
+<li>Order throughput</li>
+<li>Reservation latency</li>
+<li>Routing latency</li>
+<li>Kafka consumer lag</li>
+<li>ATP latency</li>
+<li>Failed allocations</li>
+</ul>
+<p>Logs</p>
+<ul>
+<li>Correlated by Order ID</li>
+<li>Correlated by Trace ID</li>
+</ul>
+<p>Tracing</p>
+<ul>
+<li>End-to-end order journey</li>
+<li>External dependency latency</li>
+<li>Queue wait times</li>
+</ul>
+<hr>
+<h1>12. Failure Modes</h1>
+<p>Design for:</p>
+<ul>
+<li>Duplicate events</li>
+<li>Out-of-order events</li>
+<li>Missing inventory updates</li>
+<li>Partial outages</li>
+<li>Poison messages</li>
+<li>Dead-letter queues</li>
+</ul>
+<p>Retries should be bounded and observable.</p>
+<hr>
+<h1>13. Scalability</h1>
+<p>Scale independently:</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkFQSSAtLT4gT01TCk9NUyAtLT4gQVRQCk9NUyAtLT4gUm91dGluZwpPTVMgLS0+IEludmVudG9yeQoKQVRQIC0tPiBTY2FsZTFbTWFueSBSZXBsaWNhc10KUm91dGluZyAtLT4gU2NhbGUyW01hbnkgUmVwbGljYXNdCkludmVudG9yeSAtLT4gU2NhbGUzW01hbnkgUmVwbGljYXNd"></div>
+
+<p>Typical hotspots:</p>
+<ul>
+<li>ATP</li>
+<li>Inventory lookup</li>
+<li>Routing engine</li>
+</ul>
+<hr>
+<h1>14. Security</h1>
+<p>Protect:</p>
+<ul>
+<li>Customer PII</li>
+<li>Payment tokens</li>
+<li>Inventory manipulation APIs</li>
+<li>Administrative routing rules</li>
+</ul>
+<p>Recommendations:</p>
+<ul>
+<li>OAuth2/OIDC</li>
+<li>mTLS for service-to-service traffic</li>
+<li>RBAC</li>
+<li>Immutable audit logs</li>
+</ul>
+<hr>
+<h1>15. Engineering Tradeoffs</h1>
+<p>  Decision                 Benefit               Cost</p>
+<hr>
+<p>  Events over sync calls   Resilience            Eventual consistency
+  Microservices            Independent scaling   Operational complexity
+  CQRS                     Fast reads            Additional infrastructure
+  Kafka                    Decoupling            Operational expertise</p>
+<hr>
+<h1>Executive Takeaways</h1>
+<ul>
+<li>OMS architecture is primarily about coordination rather than
+computation.</li>
+<li>Event-driven designs outperform tightly coupled synchronous
+workflows at enterprise scale.</li>
+<li>Sagas, idempotency, and eventual consistency are foundational
+patterns.</li>
+<li>Observability is a first-class requirement because failures are
+often distributed and asynchronous.</li>
+<li>The best OMS implementations optimize independently deployable
+capabilities rather than building a single monolith.</li>
+</ul>
+</article>
+<article class="chapter" id="chapter-5"><h1>Order Management Systems</h1>
+<h1>Part 5 -- Blue Yonder OMS Deep Dive</h1>
+<blockquote>
+<p><strong>Goal:</strong> Understand how Blue Yonder approaches enterprise order
+management, where it excels, where implementations struggle, and how
+to discuss it credibly in an executive interview.</p>
+</blockquote>
+<hr>
+<h1>Executive Overview</h1>
+<p>Blue Yonder positions Order Management as a composable cloud platform
+centered on three capabilities:</p>
+<ol>
+<li>Inventory visibility</li>
+<li>Intelligent order promising</li>
+<li>Order orchestration</li>
+</ol>
+<p>Unlike older monolithic OMS products, modern Blue Yonder deployments
+emphasize independently deployable services communicating through APIs
+and events.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkNvbW1lcmNlIC0tPiBBUEkKQVBJIC0tPiBPcmRlclNlcnZpY2UKT3JkZXJTZXJ2aWNlIC0tPiBJbnZlbnRvcnkKT3JkZXJTZXJ2aWNlIC0tPiBQcm9taXNpbmcKT3JkZXJTZXJ2aWNlIC0tPiBPcmNoZXN0cmF0aW9uClByb21pc2luZyAtLT4gUm91dGluZwpSb3V0aW5nIC0tPiBXTVMKUm91dGluZyAtLT4gU3RvcmVzClJvdXRpbmcgLS0+IFRNUwpJbnZlbnRvcnkgLS0+IEV2ZW50QnVzCkV2ZW50QnVzIC0tPiBPcmRlclNlcnZpY2U="></div>
+
+<hr>
+<h1>Product Philosophy</h1>
+<p>Blue Yonder treats fulfillment as an optimization problem rather than a
+workflow problem.</p>
+<p>Traditional OMS thinking:</p>
+<pre><code>Receive Order
+Choose Warehouse
+Ship
+</code></pre>
+<p>Blue Yonder thinking:</p>
+<pre><code>Receive Order
+
+↓
+
+Predict
+
+↓
+
+Optimize
+
+↓
+
+Promise
+
+↓
+
+Continuously Re-optimize
+</code></pre>
+<p>The system is expected to revise decisions as inventory and execution
+conditions evolve.</p>
+<hr>
+<h1>Core Capabilities</h1>
+<h2>Enterprise Inventory Visibility</h2>
+<p>The platform aggregates inventory from:</p>
+<ul>
+<li>Distribution Centers</li>
+<li>Retail Stores</li>
+<li>In-transit inventory</li>
+<li>Suppliers</li>
+<li>Drop ship vendors</li>
+<li>Returns</li>
+</ul>
+<p>Inventory is normalized into a single enterprise view while preserving
+node-specific attributes such as confidence, capacity, and ownership.</p>
+<p>Key design objective:</p>
+<blockquote>
+<p>One logical inventory picture built from many operational systems.</p>
+</blockquote>
+<hr>
+<h2>Order Promising</h2>
+<p>Order Promising extends beyond ATP.</p>
+<p>Inputs include:</p>
+<ul>
+<li>Inventory</li>
+<li>Carrier schedules</li>
+<li>Cutoff times</li>
+<li>Labor availability</li>
+<li>Business rules</li>
+<li>Inventory segmentation</li>
+<li>Customer priority</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>Promise date</li>
+<li>Fulfillment node</li>
+<li>Shipping method</li>
+<li>Confidence</li>
+</ul>
+<p>A promise is treated as a business commitment, not merely an inventory
+calculation.</p>
+<hr>
+<h2>Intelligent Sourcing</h2>
+<p>Blue Yonder evaluates multiple candidate nodes simultaneously.</p>
+<p>Typical optimization dimensions:</p>
+<p>  Factor                 Goal</p>
+<hr>
+<p>  Shipping cost          Minimize
+  Labor utilization      Balance
+  Delivery SLA           Meet
+  Split shipments        Reduce
+  Inventory aging        Reduce markdown risk
+  Inventory confidence   Maximize execution success</p>
+<p>No single rule dominates; the platform evaluates competing objectives.</p>
+<hr>
+<h1>Intelligent Rebalancer</h1>
+<p>One of Blue Yonder&#39;s distinguishing capabilities is dynamic re-sourcing.</p>
+<p>Scenario:</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECkludmVudG9yeUxvc3MgLS0+IFJlZXZhbHVhdGUKUmVldmFsdWF0ZSAtLT4gQWx0ZXJuYXRlTm9kZQpBbHRlcm5hdGVOb2RlIC0tPiBVcGRhdGVDdXN0b21lclByb21pc2U="></div>
+
+<p>Example:</p>
+<ul>
+<li>Store cannot find reserved inventory.</li>
+<li>OMS automatically evaluates alternate locations.</li>
+<li>Reservation is moved.</li>
+<li>Customer promise is updated.</li>
+</ul>
+<p>Without automated rebalancing, retailers frequently cancel otherwise
+recoverable orders.</p>
+<hr>
+<h1>Inventory Segmentation</h1>
+<p>Inventory fencing protects strategic inventory.</p>
+<p>Examples:</p>
+<ul>
+<li>Reserve inventory for loyalty customers</li>
+<li>Preserve presentation minimums</li>
+<li>Reserve launch inventory</li>
+<li>Hold inventory for stores</li>
+<li>Reserve wholesale commitments</li>
+</ul>
+<p>Segmentation is configured through business policy rather than
+application code.</p>
+<hr>
+<h1>Store Fulfillment</h1>
+<p>Stores become fulfillment nodes.</p>
+<p>Responsibilities include:</p>
+<ul>
+<li>Pick</li>
+<li>Pack</li>
+<li>Stage</li>
+<li>Customer pickup</li>
+<li>Ship-from-store</li>
+</ul>
+<p>Engineering implications:</p>
+<ul>
+<li>Store labor becomes a constrained resource.</li>
+<li>Inventory accuracy requirements increase dramatically.</li>
+<li>Exception handling becomes critical.</li>
+</ul>
+<hr>
+<h1>Reverse Logistics</h1>
+<p>Returns are integrated into inventory optimization.</p>
+<p>Disposition options include:</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSClJldHVybiAtLT4gUmVzdG9jawpSZXR1cm4gLS0+IE91dGxldApSZXR1cm4gLS0+IFJlZnVyYmlzaApSZXR1cm4gLS0+IExpcXVpZGF0ZQpSZXR1cm4gLS0+IERlc3Ryb3k="></div>
+
+<p>Decision criteria:</p>
+<ul>
+<li>Product condition</li>
+<li>Transportation cost</li>
+<li>Demand</li>
+<li>Margin</li>
+<li>Seasonality</li>
+</ul>
+<hr>
+<h1>Event-Driven Integration</h1>
+<p>Blue Yonder integrates with surrounding systems primarily through APIs
+and asynchronous events.</p>
+<p>Typical integrations:</p>
+<ul>
+<li>Commerce</li>
+<li>ERP</li>
+<li>WMS</li>
+<li>TMS</li>
+<li>POS</li>
+<li>CRM</li>
+</ul>
+<p>Common event types:</p>
+<pre><code>InventoryChanged
+ReservationCreated
+OrderReleased
+ShipmentConfirmed
+ReturnReceived
+</code></pre>
+<hr>
+<h1>AI Capabilities</h1>
+<p>Recent Blue Yonder investments emphasize AI-assisted operations.</p>
+<p>Current themes include:</p>
+<ul>
+<li>Exception prioritization</li>
+<li>Fulfillment recommendations</li>
+<li>Explainable sourcing decisions</li>
+<li>Conversational operational assistants</li>
+<li>Predictive disruption analysis</li>
+</ul>
+<p>Today&#39;s AI generally assists planners and operators rather than
+replacing the optimization engine.</p>
+<hr>
+<h1>Typical Implementation</h1>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECkNvbW1lcmNlIC0tPiBPTVMKUE9TIC0tPiBJbnZlbnRvcnkKRVJQIC0tPiBJbnZlbnRvcnkKSW52ZW50b3J5IC0tPiBPTVMKT01TIC0tPiBXTVMKT01TIC0tPiBDYXJyaWVyCk9NUyAtLT4gQ3VzdG9tZXJOb3RpZmljYXRpb25z"></div>
+
+<p>Implementation projects usually include:</p>
+<ol>
+<li>Integration</li>
+<li>Data cleansing</li>
+<li>Business rule migration</li>
+<li>Store onboarding</li>
+<li>Performance tuning</li>
+<li>Cutover</li>
+</ol>
+<p>The largest effort is almost always organizational change rather than
+software installation.</p>
+<hr>
+<h1>Common Failure Modes</h1>
+<p>Technical:</p>
+<ul>
+<li>Poor inventory quality</li>
+<li>Slow integrations</li>
+<li>Missing event publication</li>
+<li>Inconsistent master data</li>
+</ul>
+<p>Operational:</p>
+<ul>
+<li>Weak store processes</li>
+<li>Low cycle-count discipline</li>
+<li>Poor exception ownership</li>
+<li>Unclear sourcing policies</li>
+</ul>
+<p>The optimization engine cannot compensate for inaccurate operational
+data.</p>
+<hr>
+<h1>Strengths</h1>
+<ul>
+<li>Mature enterprise scale</li>
+<li>Sophisticated order promising</li>
+<li>Dynamic sourcing</li>
+<li>Strong inventory optimization</li>
+<li>Cloud-native direction</li>
+<li>Composable services</li>
+<li>Rich omnichannel capabilities</li>
+</ul>
+<hr>
+<h1>Limitations</h1>
+<p>Compared with custom-built platforms:</p>
+<ul>
+<li>Significant implementation effort</li>
+<li>Complex business-rule configuration</li>
+<li>Requires disciplined master data</li>
+<li>Deep integrations across many enterprise systems</li>
+<li>Licensing and transformation costs can be substantial</li>
+</ul>
+<p>Compared with competitors:</p>
+<ul>
+<li>IBM Sterling is often viewed as exceptionally configurable for
+highly complex order orchestration.</li>
+<li>Manhattan Active benefits from tight integration with Manhattan WMS.</li>
+<li>Salesforce OMS integrates naturally with Salesforce Commerce and
+Service Cloud ecosystems.</li>
+</ul>
+<hr>
+<h1>Executive Interview Notes</h1>
+<p>Questions you can answer confidently:</p>
+<p><strong>What differentiates Blue Yonder?</strong></p>
+<ul>
+<li>Real-time order promising</li>
+<li>Intelligent sourcing</li>
+<li>Dynamic rebalancing</li>
+<li>Strong inventory optimization</li>
+<li>Composable cloud architecture</li>
+</ul>
+<p><strong>Where do implementations fail?</strong></p>
+<p>Almost never because of routing algorithms.</p>
+<p>More often because of:</p>
+<ul>
+<li>inventory accuracy</li>
+<li>poor integrations</li>
+<li>inconsistent business policies</li>
+<li>organizational adoption</li>
+</ul>
+<p><strong>How does your experience map?</strong></p>
+<p>Your experience aligns with nearly every upstream dependency:</p>
+<ul>
+<li>Enterprise inventory picture</li>
+<li>Soft promises and reservations</li>
+<li>Inventory positioning</li>
+<li>Returns positioning</li>
+<li>Store fulfillment modernization</li>
+<li>Customer pickup experiences</li>
+<li>Middle-mile optimization</li>
+</ul>
+<p>While you did not own routing itself, you owned many of the systems and
+business capabilities that determine whether routing decisions are
+successful.</p>
+<hr>
+<h1>Executive Takeaways</h1>
+<ul>
+<li>Blue Yonder&#39;s competitive advantage lies in optimization rather than
+transaction processing.</li>
+<li>Accurate inventory and disciplined operations matter more than
+sophisticated algorithms operating on poor data.</li>
+<li>The product is best understood as a distributed decision platform
+coordinating commerce, inventory, fulfillment, and transportation.</li>
+</ul>
+</article>
+<article class="chapter" id="chapter-6"><h1>Order Management Systems</h1>
+<h1>Part 6 -- Comparing Blue Yonder, IBM Sterling, Manhattan Active Omni &amp; Salesforce OMS</h1>
+<h2>Executive Summary</h2>
+<p>All four platforms solve the same core problem---accept an order,
+determine how it should be fulfilled, orchestrate execution, and recover
+from exceptions---but they emphasize different strengths.</p>
+<hr>
+<p>  Platform                Primary Strength        Typical Buyer</p>
+<hr>
+<p>  Blue Yonder             Optimization and        Large omnichannel
+                          intelligent fulfillment retailers</p>
+<p>  IBM Sterling OMS        Complex orchestration   Enterprises with
+                          and configurability     heterogeneous
+                                                  environments</p>
+<p>  Manhattan Active Omni   Tight store + WMS       Retailers standardized
+                          integration             on Manhattan</p>
+<p>  Salesforce OMS          Commerce ecosystem      Salesforce Commerce
+                      integration             Cloud customers</p>
+<hr>
+<hr>
+<h1>Evaluation Framework</h1>
+<p>A Senior Engineering leader should compare OMS platforms across the
+following dimensions:</p>
+<ul>
+<li>Inventory visibility</li>
+<li>ATP / Order Promising</li>
+<li>Fulfillment routing</li>
+<li>Exception handling</li>
+<li>Returns</li>
+<li>APIs &amp; integration</li>
+<li>Cloud architecture</li>
+<li>Operational tooling</li>
+<li>Extensibility</li>
+<li>Vendor ecosystem</li>
+<li>Total cost of ownership</li>
+</ul>
+<hr>
+<h1>1. Blue Yonder</h1>
+<h2>Design Philosophy</h2>
+<p>Optimize every fulfillment decision.</p>
+<pre><code class="language-text">Demand
+   ↓
+Optimization
+   ↓
+Promise
+   ↓
+Continuous Re-planning
+</code></pre>
+<h3>Strengths</h3>
+<ul>
+<li>Sophisticated optimization</li>
+<li>Inventory segmentation</li>
+<li>Intelligent rebalancing</li>
+<li>Mature omnichannel workflows</li>
+<li>Enterprise scale</li>
+</ul>
+<h3>Challenges</h3>
+<ul>
+<li>Business-rule complexity</li>
+<li>Heavy integration effort</li>
+<li>Requires high-quality inventory data</li>
+</ul>
+<p>Best fit:</p>
+<p>Large retailers with multiple fulfillment channels and sophisticated
+supply-chain operations.</p>
+<hr>
+<h1>2. IBM Sterling OMS</h1>
+<h2>Design Philosophy</h2>
+<p>Model complex business processes and orchestrate them reliably.</p>
+<p>Sterling has long been known for supporting intricate fulfillment rules
+across many business units, brands, and legacy systems.</p>
+<h3>Strengths</h3>
+<ul>
+<li>Extremely configurable orchestration</li>
+<li>Mature DOM capabilities</li>
+<li>Complex sourcing rules</li>
+<li>Strong enterprise integration history</li>
+</ul>
+<h3>Challenges</h3>
+<ul>
+<li>Can be configuration-heavy</li>
+<li>Significant implementation effort</li>
+<li>Requires governance to prevent rules from becoming unmanageable</li>
+</ul>
+<p>Typical fit:</p>
+<p>Retailers with complicated fulfillment policies, acquisitions, or
+multiple legacy systems.</p>
+<hr>
+<h1>3. Manhattan Active Omni</h1>
+<h2>Design Philosophy</h2>
+<p>Treat stores as first-class fulfillment centers.</p>
+<p>The platform is particularly compelling when paired with Manhattan WMS
+because inventory, execution, and fulfillment workflows are closely
+aligned.</p>
+<h3>Strengths</h3>
+<ul>
+<li>Excellent store fulfillment</li>
+<li>Tight WMS integration</li>
+<li>Strong labor-aware execution</li>
+<li>Mature BOPIS and Ship-from-Store</li>
+</ul>
+<h3>Challenges</h3>
+<ul>
+<li>Greatest value often comes when using the broader Manhattan platform</li>
+<li>Less attractive if an organization has standardized elsewhere</li>
+</ul>
+<p>Typical fit:</p>
+<p>Retailers investing heavily in store-based fulfillment.</p>
+<hr>
+<h1>4. Salesforce OMS</h1>
+<h2>Design Philosophy</h2>
+<p>Extend digital commerce with lightweight order orchestration.</p>
+<h3>Strengths</h3>
+<ul>
+<li>Native Salesforce ecosystem</li>
+<li>Rapid commerce integration</li>
+<li>Strong CRM and customer service experience</li>
+<li>Good API model</li>
+</ul>
+<h3>Challenges</h3>
+<ul>
+<li>Less supply-chain depth than specialized OMS vendors</li>
+<li>Complex fulfillment optimization may require complementary products</li>
+</ul>
+<p>Typical fit:</p>
+<p>Organizations centered on Salesforce Commerce Cloud.</p>
+<hr>
+<h1>Architectural Comparison</h1>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkNvbW1lcmNlIC0tPiBPTVMKT01TIC0tPiBJbnZlbnRvcnkKT01TIC0tPiBSb3V0aW5nClJvdXRpbmcgLS0+IFdNUwpSb3V0aW5nIC0tPiBTdG9yZXMKUm91dGluZyAtLT4gQ2FycmllcnM="></div>
+
+<p>Every platform implements this pattern differently:</p>
+<ul>
+<li>Blue Yonder emphasizes optimization engines.</li>
+<li>Sterling emphasizes orchestration flexibility.</li>
+<li>Manhattan emphasizes execution.</li>
+<li>Salesforce emphasizes commerce integration.</li>
+</ul>
+<hr>
+<h1>Configuration vs Custom Code</h1>
+<p>A recurring executive decision:</p>
+<pre><code class="language-text">Business Requirement
+
+↓
+
+Configuration?
+
+↓
+
+Extension?
+
+↓
+
+Custom Service?
+</code></pre>
+<p>Guideline:</p>
+<p>Prefer configuration for business policies and custom code only for
+differentiating capabilities.</p>
+<hr>
+<h1>Cloud Architecture</h1>
+<p>Modern offerings have largely moved toward:</p>
+<ul>
+<li>APIs</li>
+<li>Events</li>
+<li>Containers</li>
+<li>Elastic scaling</li>
+<li>SaaS operations</li>
+</ul>
+<p>However, customer maturity varies and many implementations remain hybrid
+for years.</p>
+<hr>
+<h1>Integration Strategy</h1>
+<p>Typical integrations include:</p>
+<ul>
+<li>Commerce</li>
+<li>ERP</li>
+<li>POS</li>
+<li>WMS</li>
+<li>TMS</li>
+<li>CRM</li>
+<li>Fraud</li>
+<li>Payment</li>
+<li>Customer notifications</li>
+</ul>
+<p>Integration quality often determines project success more than OMS
+feature depth.</p>
+<hr>
+<h1>Migration Considerations</h1>
+<p>Key questions:</p>
+<ol>
+<li>How clean is inventory data?</li>
+<li>Where is the current source of truth?</li>
+<li>How many routing rules exist?</li>
+<li>Can fulfillment policies be simplified?</li>
+<li>Which integrations are synchronous today?</li>
+<li>How will historical orders be handled?</li>
+</ol>
+<p>Migration is as much a business transformation as a technology project.</p>
+<hr>
+<h1>Common Reasons Projects Struggle</h1>
+<ul>
+<li>Poor master data</li>
+<li>Inaccurate inventory</li>
+<li>Too many bespoke workflows</li>
+<li>Weak executive sponsorship</li>
+<li>Insufficient testing of edge cases</li>
+<li>Underestimating store operational change</li>
+</ul>
+<hr>
+<h1>Questions to Ask a Vendor</h1>
+<ul>
+<li>How is ATP calculated?</li>
+<li>How are sourcing decisions explained?</li>
+<li>Can routing rules be simulated?</li>
+<li>How is inventory confidence represented?</li>
+<li>What happens when a fulfillment node fails?</li>
+<li>How are business policies versioned?</li>
+<li>What observability is provided?</li>
+<li>How are upgrades managed?</li>
+</ul>
+<p>These questions often reveal more than feature matrices.</p>
+<hr>
+<h1>Mapping to Your Experience</h1>
+<p>Your background aligns strongly with the capabilities surrounding an
+OMS:</p>
+<p>  Experience                        OMS Capability</p>
+<hr>
+<p>  Inventory positioning             Enterprise inventory optimization
+  Returns positioning               Reverse logistics
+  Selling inventory platform        Inventory availability &amp; reservations
+  Store fulfillment modernization   BOPIS / Ship-from-Store
+  Customer pickup initiatives       Omnichannel execution
+  Middle-mile optimization          Fulfillment network efficiency</p>
+<p>You can accurately describe yourself as someone who has spent years
+building and modernizing the systems that an OMS depends upon, even if
+routing itself reported to another organization.</p>
+<hr>
+<h1>Executive Conclusions</h1>
+<p>There is no universally &quot;best&quot; OMS.</p>
+<p>Choose the platform that best aligns with:</p>
+<ul>
+<li>Existing enterprise architecture</li>
+<li>Operational maturity</li>
+<li>Fulfillment strategy</li>
+<li>Organizational skills</li>
+<li>Long-term roadmap</li>
+</ul>
+<p>A successful OMS implementation is less about selecting the most
+feature-rich product and more about combining accurate inventory,
+disciplined business processes, and a platform whose architectural
+philosophy matches the retailer&#39;s operating model.</p>
+</article>
+<article class="chapter" id="chapter-7"><h1>Order Management Systems</h1>
+<h1>Part 7 -- Executive Interview Guide &amp; Glossary</h1>
+<h2>Purpose</h2>
+<p>This chapter distills the handbook into practical interview guidance for
+Senior Director and VP engineering roles leading omnichannel fulfillment
+or Order Management.</p>
+<hr>
+<h1>Executive Narrative</h1>
+<p>A concise positioning statement:</p>
+<blockquote>
+<p>&quot;My experience has been centered on the systems that make enterprise
+order management possible. I&#39;ve led modernization of store fulfillment
+and customer pickup experiences, owned real-time selling inventory
+services, and led inventory positioning, returns positioning, and
+middle-mile optimization. While routing itself lived in a separate
+organization, I partnered closely with that team for years and
+understand the tradeoffs among inventory accuracy, customer promise,
+operational cost, and fulfillment execution.&quot;</p>
+</blockquote>
+<p>Avoid claiming ownership of capabilities you did not own. Emphasize
+architectural understanding and cross-functional leadership.</p>
+<hr>
+<h1>Your Experience Mapped</h1>
+<p>  Your Experience                   OMS Domain</p>
+<hr>
+<p>  Inventory positioning             Network optimization
+  Selling inventory service         Inventory availability / reservations
+  Store fulfillment modernization   BOPIS / Ship-from-Store
+  Customer pickup                   Omnichannel fulfillment
+  Returns positioning               Reverse logistics
+  Middle-mile                       Fulfillment network efficiency</p>
+<hr>
+<h1>Likely Interview Questions</h1>
+<h2>What is the purpose of an OMS?</h2>
+<p>An OMS is a distributed decision engine that determines whether an order
+can be promised, where it should be fulfilled, and how to recover when
+execution conditions change.</p>
+<hr>
+<h2>What is ATP?</h2>
+<p>Available-to-Promise is the quantity that can confidently be committed
+after accounting for inventory state, reservations, safety stock,
+operational constraints, and business policy.</p>
+<hr>
+<h2>Difference between ATP and routing?</h2>
+<p>ATP answers <strong>can</strong> the order be promised.</p>
+<p>Routing answers <strong>where</strong> it should be fulfilled.</p>
+<hr>
+<h2>Soft vs Hard Reservation</h2>
+<p>Soft reservation:</p>
+<ul>
+<li>Protect inventory</li>
+<li>Fulfillment node not selected</li>
+</ul>
+<p>Hard reservation:</p>
+<ul>
+<li>Node selected</li>
+<li>Inventory committed</li>
+</ul>
+<hr>
+<h2>OMS vs WMS</h2>
+<p>OMS decides.</p>
+<p>WMS executes.</p>
+<hr>
+<h2>What causes OMS implementations to fail?</h2>
+<p>Technical causes:</p>
+<ul>
+<li>Poor inventory quality</li>
+<li>Weak integrations</li>
+<li>Incomplete observability</li>
+</ul>
+<p>Business causes:</p>
+<ul>
+<li>Excessive customization</li>
+<li>Inconsistent fulfillment policy</li>
+<li>Weak operational discipline</li>
+<li>Lack of executive sponsorship</li>
+</ul>
+<hr>
+<h1>Executive Metrics</h1>
+<p>  KPI                    Executive Question</p>
+<hr>
+<p>  Fill Rate              Are we satisfying demand?
+  Cancel Rate            Are our promises accurate?
+  Split Shipment %       Are we controlling fulfillment cost?
+  Inventory Accuracy     Can we trust routing decisions?
+  Order Cycle Time       How quickly do we fulfill?
+  Return-to-Stock Time   How quickly do returns become sellable?</p>
+<hr>
+<h1>Architecture Discussion Points</h1>
+<p>Strong interview themes:</p>
+<ul>
+<li>Event-driven architecture</li>
+<li>Loose coupling</li>
+<li>Kafka</li>
+<li>CQRS</li>
+<li>Sagas</li>
+<li>Idempotency</li>
+<li>Eventual consistency</li>
+<li>API-first integration</li>
+<li>Observability</li>
+</ul>
+<p>Do not over-index on technology names. Explain why the pattern solves a
+business problem.</p>
+<hr>
+<h1>Questions to Ask the Interviewer</h1>
+<h2>Organization</h2>
+<ul>
+<li>Who owns routing?</li>
+<li>Who owns inventory?</li>
+<li>Who owns fulfillment execution?</li>
+<li>Is OMS separate from WMS engineering?</li>
+</ul>
+<h2>Technology</h2>
+<ul>
+<li>Build or buy?</li>
+<li>Which OMS platform?</li>
+<li>Event-driven?</li>
+<li>Real-time inventory service?</li>
+<li>Cloud-native or hybrid?</li>
+</ul>
+<h2>Business</h2>
+<ul>
+<li>Largest fulfillment challenge today?</li>
+<li>Biggest source of cancellations?</li>
+<li>Inventory accuracy goals?</li>
+<li>Current omnichannel priorities?</li>
+</ul>
+<hr>
+<h1>30-Second Whiteboard</h1>
+<pre><code class="language-text">Commerce
+    │
+    ▼
+ OMS ─────► Inventory
+  │
+  ├────► Routing
+  │
+  ├────► WMS
+  │
+  ├────► TMS
+  │
+  └────► Customer Notifications
+</code></pre>
+<p>If you can explain this picture clearly, most OMS conversations become
+much easier.</p>
+<hr>
+<h1>Glossary</h1>
+<p>  Term                   Meaning</p>
+<hr>
+<p>  ATP                    Available-to-Promise
+  CTP                    Capable-to-Promise
+  Allocation             Release work for execution
+  Reservation            Protect inventory for an order
+  DOM                    Distributed Order Management
+  BOPIS                  Buy Online Pickup In Store
+  SFS                    Ship From Store
+  STS                    Ship To Store
+  OMS                    Order Management System
+  WMS                    Warehouse Management System
+  TMS                    Transportation Management System
+  ERP                    Enterprise Resource Planning
+  CQRS                   Separate read/write models
+  Saga                   Distributed workflow with compensating actions
+  Eventual Consistency   Independent services converge over time
+  Inventory Fencing      Reserve inventory for a purpose or channel
+  Inventory Confidence   Trust score for inventory accuracy</p>
+<hr>
+<h1>Final Interview Advice</h1>
+<p>Speak in terms of <strong>tradeoffs</strong> rather than absolutes.</p>
+<p>Examples:</p>
+<ul>
+<li>Customer experience vs fulfillment cost</li>
+<li>Shipping speed vs inventory health</li>
+<li>Store labor vs DC utilization</li>
+<li>Consistency vs availability</li>
+<li>Configuration vs customization</li>
+</ul>
+<p>Senior engineering leaders are expected to optimize systems, not
+individual technologies.</p>
+<p>The strongest answer you can give is not &quot;I&#39;ve used Blue Yonder.&quot; It is:</p>
+<blockquote>
+<p>&quot;I understand the business problems an OMS solves, the architectural
+patterns used to solve them, the operational realities required for
+success, and how to lead organizations that build and evolve those
+capabilities.&quot;</p>
+</blockquote>
+<p>That demonstrates executive-level understanding regardless of which
+commercial platform a company has selected.</p>
+</article></main>
+  <script src="assets/mermaid.min.js"></script>
+  <script>
+    for (const node of document.querySelectorAll(".mermaid-source")) {
+      node.className = "mermaid";
+      node.textContent = new TextDecoder().decode(Uint8Array.from(atob(node.dataset.code), character => character.charCodeAt(0)));
+      node.removeAttribute("data-code");
+    }
+    mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict", flowchart: { htmlLabels: true, useMaxWidth: true }, sequence: { useMaxWidth: true } });
+    window.__renderPromise = (async () => {
+      const nodes = [...document.querySelectorAll(".mermaid")];
+      for (const [index, node] of nodes.entries()) {
+        try {
+          await mermaid.run({ nodes: [node], suppressErrors: false });
+        } catch (error) {
+          const detail = error?.message ?? error?.str ?? JSON.stringify(error) ?? String(error);
+          throw new Error("Diagram " + (index + 1) + ": " + detail);
+        }
+      }
+      await document.fonts.ready;
+    })();
+  </script>
+</body>
+</html>
