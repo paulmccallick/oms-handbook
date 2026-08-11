@@ -1339,26 +1339,31 @@ degraded-mode design determine whether an implementation succeeds at scale.</li>
 <article class="chapter" id="chapter-6"><h1>Order Management Systems</h1>
 <h1>Part 6 -- Comparing Blue Yonder, IBM Sterling, Manhattan Active Omni &amp; Salesforce OMS</h1>
 <h2>Executive Summary</h2>
-<p>All four platforms solve the same core problem---accept an order,
-determine how it should be fulfilled, orchestrate execution, and recover
-from exceptions---but they emphasize different strengths.</p>
+<p>All four product families address order capture, promising, fulfillment
+orchestration, and exception management. Their precise scope, packaging,
+deployment model, and integration surface change over time and may vary by
+edition. The comparison below is therefore a due-diligence framework, not a
+fixed ranking or substitute for current vendor documentation and a
+scenario-based proof of concept.</p>
 <hr>
-<p>  Platform                Primary Strength        Typical Buyer</p>
+<p>  Platform                Public Positioning      Questions to Validate</p>
 <hr>
-<p>  Blue Yonder             Optimization and        Large omnichannel
-                          intelligent fulfillment retailers</p>
-<p>  IBM Sterling OMS        Complex orchestration   Enterprises with
-                          and configurability     heterogeneous
-                                                  environments</p>
-<p>  Manhattan Active Omni   Tight store + WMS       Retailers standardized
-                          integration             on Manhattan</p>
-<p>  Salesforce OMS          Commerce ecosystem      Salesforce Commerce
-                      integration             Cloud customers</p>
+<p>  Blue Yonder             Supply-chain planning   Which order-management,
+                          and orchestration        promising, and fulfillment
+                                                  capabilities are included?</p>
+<p>  IBM Sterling OMS        Order orchestration     Which flows are configured,
+                          across channels and     extended, or custom-built?
+                          partners</p>
+<p>  Manhattan Active Omni   Omnichannel selling     What dependencies or benefits
+                          and fulfillment         arise from other Manhattan
+                                                  products?</p>
+<p>  Salesforce OMS          Order lifecycle within  Where do inventory promising,
+                      the Salesforce platform sourcing, and execution live?</p>
 <hr>
 <hr>
 <h1>Evaluation Framework</h1>
-<p>A Senior Engineering leader should compare OMS platforms across the
-following dimensions:</p>
+<p>An evaluation team should compare platforms against weighted business
+scenarios and nonfunctional requirements across the following dimensions:</p>
 <ul>
 <li>Inventory visibility</li>
 <li>ATP / Order Promising</li>
@@ -1375,7 +1380,9 @@ following dimensions:</p>
 <hr>
 <h1>1. Blue Yonder</h1>
 <h2>Design Philosophy</h2>
-<p>Optimize every fulfillment decision.</p>
+<p>Blue Yonder publicly positions a portfolio spanning supply-chain planning,
+commerce, and fulfillment. An evaluation should establish which product or
+combination owns each OMS responsibility in the proposed architecture.</p>
 <pre><code class="language-text">Demand
    ↓
 Optimization
@@ -1384,95 +1391,98 @@ Promise
    ↓
 Continuous Re-planning
 </code></pre>
-<h3>Strengths</h3>
+<h3>Capabilities to Validate</h3>
 <ul>
-<li>Sophisticated optimization</li>
-<li>Inventory segmentation</li>
-<li>Intelligent rebalancing</li>
-<li>Mature omnichannel workflows</li>
-<li>Enterprise scale</li>
+<li>Order promising and sourcing behavior</li>
+<li>Inventory segmentation and availability controls</li>
+<li>Optimization objectives, constraints, and explainability</li>
+<li>Re-planning and exception workflows</li>
+<li>Scale, latency, and resilience under representative loads</li>
 </ul>
-<h3>Challenges</h3>
+<h3>Due-Diligence Questions</h3>
 <ul>
-<li>Business-rule complexity</li>
-<li>Heavy integration effort</li>
-<li>Requires high-quality inventory data</li>
+<li>Which capabilities belong to each licensed module?</li>
+<li>Which policies are configurable, and which require extensions?</li>
+<li>What inventory quality and latency assumptions affect decisions?</li>
+<li>How are upgrades, observability, and operational support handled?</li>
 </ul>
-<p>Best fit:</p>
-<p>Large retailers with multiple fulfillment channels and sophisticated
-supply-chain operations.</p>
+<p>Potential fit should be determined from validated scenarios, operating-model
+alignment, integration cost, and total cost of ownership rather than company
+size alone.</p>
 <hr>
 <h1>2. IBM Sterling OMS</h1>
 <h2>Design Philosophy</h2>
 <p>Model complex business processes and orchestrate them reliably.</p>
-<p>Sterling has long been known for supporting intricate fulfillment rules
-across many business units, brands, and legacy systems.</p>
-<h3>Strengths</h3>
+<p>IBM positions Sterling Order Management for cross-channel order orchestration.
+The evaluation should test the proposed design against the organization&#39;s
+actual brands, nodes, partners, and exception paths.</p>
+<h3>Capabilities to Validate</h3>
 <ul>
-<li>Extremely configurable orchestration</li>
-<li>Mature DOM capabilities</li>
-<li>Complex sourcing rules</li>
-<li>Strong enterprise integration history</li>
+<li>Order orchestration and distributed order management</li>
+<li>Sourcing and promising policies</li>
+<li>Workflow configuration and exception handling</li>
+<li>Integration APIs, events, adapters, and operational tooling</li>
 </ul>
-<h3>Challenges</h3>
+<h3>Due-Diligence Questions</h3>
 <ul>
-<li>Can be configuration-heavy</li>
-<li>Significant implementation effort</li>
-<li>Requires governance to prevent rules from becoming unmanageable</li>
+<li>How are workflows modeled, tested, versioned, and promoted?</li>
+<li>What is the boundary between configuration and custom extensions?</li>
+<li>How are implementation complexity and upgrade compatibility controlled?</li>
+<li>Which deployment and managed-service options apply to the proposed edition?</li>
 </ul>
-<p>Typical fit:</p>
-<p>Retailers with complicated fulfillment policies, acquisitions, or
-multiple legacy systems.</p>
+<p>Fit depends on demonstrated support for the required orchestration scenarios
+and the team&#39;s ability to govern the resulting configuration and extensions.</p>
 <hr>
 <h1>3. Manhattan Active Omni</h1>
 <h2>Design Philosophy</h2>
-<p>Treat stores as first-class fulfillment centers.</p>
-<p>The platform is particularly compelling when paired with Manhattan WMS
-because inventory, execution, and fulfillment workflows are closely
-aligned.</p>
-<h3>Strengths</h3>
+<p>Manhattan positions Active Omni around omnichannel commerce and fulfillment.
+Evaluators should test store, contact-center, inventory, and fulfillment
+workflows both with and without other Manhattan products in scope.</p>
+<h3>Capabilities to Validate</h3>
 <ul>
-<li>Excellent store fulfillment</li>
-<li>Tight WMS integration</li>
-<li>Strong labor-aware execution</li>
-<li>Mature BOPIS and Ship-from-Store</li>
+<li>Store fulfillment and customer-service workflows</li>
+<li>Inventory visibility, promising, and sourcing</li>
+<li>BOPIS, ship-from-store, returns, and exception handling</li>
+<li>Integration with warehouse, labor, commerce, and external systems</li>
 </ul>
-<h3>Challenges</h3>
+<h3>Due-Diligence Questions</h3>
 <ul>
-<li>Greatest value often comes when using the broader Manhattan platform</li>
-<li>Less attractive if an organization has standardized elsewhere</li>
+<li>Which integrations are native, separately licensed, or implementation work?</li>
+<li>What benefits depend on adoption of the broader platform?</li>
+<li>How are external systems integrated and operationally supported?</li>
+<li>How are releases tested against customer extensions and workflows?</li>
 </ul>
-<p>Typical fit:</p>
-<p>Retailers investing heavily in store-based fulfillment.</p>
+<p>Fit should follow evidence from the organization&#39;s target fulfillment model,
+not an assumption that every retailer gives stores the same role.</p>
 <hr>
 <h1>4. Salesforce OMS</h1>
 <h2>Design Philosophy</h2>
-<p>Extend digital commerce with lightweight order orchestration.</p>
-<h3>Strengths</h3>
+<p>Salesforce positions Order Management as part of its commerce and customer
+platform. An evaluation must define which system owns promising, sourcing,
+inventory, fulfillment execution, and customer service in the target design.</p>
+<h3>Capabilities to Validate</h3>
 <ul>
-<li>Native Salesforce ecosystem</li>
-<li>Rapid commerce integration</li>
-<li>Strong CRM and customer service experience</li>
-<li>Good API model</li>
+<li>Order capture and lifecycle management</li>
+<li>Customer-service and commerce workflows</li>
+<li>APIs, events, data model, and platform automation</li>
+<li>Inventory, allocation, returns, and fulfillment capabilities in scope</li>
 </ul>
-<h3>Challenges</h3>
+<h3>Due-Diligence Questions</h3>
 <ul>
-<li>Less supply-chain depth than specialized OMS vendors</li>
-<li>Complex fulfillment optimization may require complementary products</li>
+<li>Which OMS functions are native and which rely on partner or external systems?</li>
+<li>Where do optimization and distributed sourcing decisions execute?</li>
+<li>What platform limits, licensing boundaries, and data-volume costs apply?</li>
+<li>How are customizations governed across platform releases?</li>
 </ul>
-<p>Typical fit:</p>
-<p>Organizations centered on Salesforce Commerce Cloud.</p>
+<p>Existing Salesforce adoption may affect integration effort, but fit still
+depends on end-to-end fulfillment scenarios and architectural requirements.</p>
 <hr>
 <h1>Architectural Comparison</h1>
 <div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkNvbW1lcmNlIC0tPiBPTVMKT01TIC0tPiBJbnZlbnRvcnkKT01TIC0tPiBSb3V0aW5nClJvdXRpbmcgLS0+IFdNUwpSb3V0aW5nIC0tPiBTdG9yZXMKUm91dGluZyAtLT4gQ2FycmllcnM="></div>
 
-<p>Every platform implements this pattern differently:</p>
-<ul>
-<li>Blue Yonder emphasizes optimization engines.</li>
-<li>Sterling emphasizes orchestration flexibility.</li>
-<li>Manhattan emphasizes execution.</li>
-<li>Salesforce emphasizes commerce integration.</li>
-</ul>
+<p>Product boundaries differ by vendor, edition, and proposed solution. During
+evaluation, assign an authoritative owner to every box and interface in the
+target architecture; do not infer ownership from product branding.</p>
 <hr>
 <h1>Configuration vs Custom Code</h1>
 <p>A recurring executive decision:</p>
@@ -1491,11 +1501,13 @@ Extension?
 Custom Service?
 </code></pre>
 <p>Guideline:</p>
-<p>Prefer configuration for business policies and custom code only for
-differentiating capabilities.</p>
+<p>Choose configuration, extension, or an external service according to change
+frequency, testability, observability, portability, upgrade impact, and the
+organization&#39;s operating model. Configuration is not automatically cheaper or
+safer than code; both require lifecycle governance.</p>
 <hr>
 <h1>Cloud Architecture</h1>
-<p>Modern offerings have largely moved toward:</p>
+<p>Current offerings commonly expose some combination of:</p>
 <ul>
 <li>APIs</li>
 <li>Events</li>
@@ -1503,8 +1515,9 @@ differentiating capabilities.</p>
 <li>Elastic scaling</li>
 <li>SaaS operations</li>
 </ul>
-<p>However, customer maturity varies and many implementations remain hybrid
-for years.</p>
+<p>The presence of these terms does not establish architectural equivalence.
+Validate tenancy, isolation, scaling units, release control, regional support,
+recovery objectives, and which components remain customer-operated.</p>
 <hr>
 <h1>Integration Strategy</h1>
 <p>Typical integrations include:</p>
@@ -1519,8 +1532,8 @@ for years.</p>
 <li>Payment</li>
 <li>Customer notifications</li>
 </ul>
-<p>Integration quality often determines project success more than OMS
-feature depth.</p>
+<p>Integration quality is one of several major success factors alongside process
+design, data quality, product fit, operational readiness, and governance.</p>
 <hr>
 <h1>Migration Considerations</h1>
 <p>Key questions:</p>
@@ -1557,20 +1570,20 @@ feature depth.</p>
 </ul>
 <p>These questions often reveal more than feature matrices.</p>
 <hr>
-<h1>Mapping to Your Experience</h1>
-<p>Your background aligns strongly with the capabilities surrounding an
-OMS:</p>
-<p>  Experience                        OMS Capability</p>
+<h1>Mapping Organizational Capabilities</h1>
+<p>An OMS program spans capabilities that may already exist in separate business
+and technology teams:</p>
+<p>  Existing Capability                OMS Relationship</p>
 <hr>
-<p>  Inventory positioning             Enterprise inventory optimization
-  Returns positioning               Reverse logistics
-  Selling inventory platform        Inventory availability &amp; reservations
-  Store fulfillment modernization   BOPIS / Ship-from-Store
-  Customer pickup initiatives       Omnichannel execution
-  Middle-mile optimization          Fulfillment network efficiency</p>
-<p>You can accurately describe yourself as someone who has spent years
-building and modernizing the systems that an OMS depends upon, even if
-routing itself reported to another organization.</p>
+<p>  Inventory positioning              Availability and promising inputs
+  Returns operations                 Reverse logistics and refund workflows
+  Inventory services                 Visibility, reservations, and adjustments
+  Store operations                   Pickup and ship-from-store execution
+  Customer service                   Order changes and exception resolution
+  Transportation and logistics       Fulfillment cost and service outcomes</p>
+<p>The evaluation should identify current owners, reusable capabilities, gaps,
+and future system boundaries. It should not assume that all responsibilities
+must move into the OMS or remain in their current systems.</p>
 <hr>
 <h1>Executive Conclusions</h1>
 <p>There is no universally &quot;best&quot; OMS.</p>
