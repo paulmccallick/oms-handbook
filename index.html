@@ -73,7 +73,7 @@
 <li><a href="#chapter-2"><span class="toc-part">Part 2 -- Omnichannel Fulfillment Workflows</span><span class="toc-dots"></span><span class="toc-number">2</span></a></li>
 <li><a href="#chapter-3"><span class="toc-part">Part 3 -- Inventory, ATP, Routing &amp; Order Orchestration</span><span class="toc-dots"></span><span class="toc-number">3</span></a></li>
 <li><a href="#chapter-4"><span class="toc-part">Part 4 -- Technical Architecture for Enterprise OMS</span><span class="toc-dots"></span><span class="toc-number">4</span></a></li>
-<li><a href="#chapter-5"><span class="toc-part">Part 5 -- Blue Yonder OMS Deep Dive</span><span class="toc-dots"></span><span class="toc-number">5</span></a></li>
+<li><a href="#chapter-5"><span class="toc-part">Part 5 -- Blue Yonder Order Management Deep Dive</span><span class="toc-dots"></span><span class="toc-number">5</span></a></li>
 <li><a href="#chapter-6"><span class="toc-part">Part 6 -- Comparing Blue Yonder, IBM Sterling, Manhattan Active Omni &amp; Salesforce OMS</span><span class="toc-dots"></span><span class="toc-number">6</span></a></li>
 <li><a href="#chapter-7"><span class="toc-part">Part 7 -- Executive Interview Guide &amp; Glossary</span><span class="toc-dots"></span><span class="toc-number">7</span></a></li></ol>
   </nav>
@@ -826,306 +826,469 @@ capabilities rather than building a single monolith.</li>
 </ul>
 </article>
 <article class="chapter" id="chapter-5"><h1>Order Management Systems</h1>
-<h1>Part 5 -- Blue Yonder OMS Deep Dive</h1>
+<h1>Part 5 -- Blue Yonder Order Management Deep Dive</h1>
 <blockquote>
-<p><strong>Goal:</strong> Understand how Blue Yonder approaches enterprise order
-management, where it excels, where implementations struggle, and how
-to discuss it credibly in an executive interview.</p>
+<p><strong>Goal:</strong> Understand the documented shape of Blue Yonder Order
+Management, how it commonly fits into an enterprise architecture, where
+configuration ends and extension begins, and which details require access to
+Blue Yonder&#39;s customer documentation.</p>
 </blockquote>
 <hr>
 <h1>Executive Overview</h1>
-<p>Blue Yonder positions Order Management as a composable cloud platform
-centered on three capabilities:</p>
-<ol>
-<li>Inventory visibility</li>
-<li>Intelligent order promising</li>
-<li>Order orchestration</li>
-</ol>
-<p>Unlike older monolithic OMS products, modern Blue Yonder deployments
-emphasize independently deployable services communicating through APIs
-and events.</p>
-<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkNvbW1lcmNlIC0tPiBBUEkKQVBJIC0tPiBPcmRlclNlcnZpY2UKT3JkZXJTZXJ2aWNlIC0tPiBJbnZlbnRvcnkKT3JkZXJTZXJ2aWNlIC0tPiBQcm9taXNpbmcKT3JkZXJTZXJ2aWNlIC0tPiBPcmNoZXN0cmF0aW9uClByb21pc2luZyAtLT4gUm91dGluZwpSb3V0aW5nIC0tPiBXTVMKUm91dGluZyAtLT4gU3RvcmVzClJvdXRpbmcgLS0+IFRNUwpJbnZlbnRvcnkgLS0+IEV2ZW50QnVzCkV2ZW50QnVzIC0tPiBPcmRlclNlcnZpY2U="></div>
-
-<hr>
-<h1>Product Philosophy</h1>
-<p>Blue Yonder treats fulfillment as an optimization problem rather than a
-workflow problem.</p>
-<p>Traditional OMS thinking:</p>
-<pre><code>Receive Order
-Choose Warehouse
-Ship
-</code></pre>
-<p>Blue Yonder thinking:</p>
-<pre><code>Receive Order
-
-↓
-
-Predict
-
-↓
-
-Optimize
-
-↓
-
-Promise
-
-↓
-
-Continuously Re-optimize
-</code></pre>
-<p>The system is expected to revise decisions as inventory and execution
-conditions evolve.</p>
-<hr>
-<h1>Core Capabilities</h1>
-<h2>Enterprise Inventory Visibility</h2>
-<p>The platform aggregates inventory from:</p>
+<p>Blue Yonder markets its current Order Management offering as a set of
+cloud-native, API-first, composable services rather than one indivisible order
+management application. Public product material groups the offering around
+inventory availability, order promising and optimization, order orchestration,
+store fulfillment, returns, and related customer-service capabilities.</p>
+<p>That positioning matters architecturally. A company can use selected services
+to augment an existing commerce or OMS estate, or adopt a broader set of Blue
+Yonder capabilities over time. Blue Yonder explicitly describes this as an
+&quot;augmentative&quot; microservices approach rather than requiring every customer to
+replace its entire transaction stack at once.</p>
+<p>Sources:</p>
 <ul>
-<li>Distribution Centers</li>
-<li>Retail Stores</li>
-<li>In-transit inventory</li>
-<li>Suppliers</li>
-<li>Drop ship vendors</li>
-<li>Returns</li>
+<li><a href="https://blueyonder.com/solutions/order-management-and-commerce">Blue Yonder Order Management &amp; Commerce</a></li>
+<li><a href="https://info.blueyonder.com/order-management-commerce/what-are-blue-yonder-order-services">What are Blue Yonder Order Services?</a></li>
+<li><a href="https://catalogartifact.azureedge.net/publicartifacts/jdasoftware-global.luminate_commerce_appsource-b9b47a55-aa9a-4731-902f-5b4361610f82/Artifacts/Documents/Order_Management_Microservices_SS.pdf">Order Management Microservices solution overview</a></li>
 </ul>
-<p>Inventory is normalized into a single enterprise view while preserving
-node-specific attributes such as confidence, capacity, and ownership.</p>
-<p>Key design objective:</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCiAgICBDaGFubmVsc1tDb21tZXJjZSwgbWFya2V0cGxhY2VzLCBzdG9yZXMsIHNlcnZpY2VdIC0tPiBFeHBlcmllbmNlQVBJW0V4cGVyaWVuY2UgQVBJc10KICAgIEV4cGVyaWVuY2VBUEkgLS0+IEludmVudG9yeVtJbnZlbnRvcnkgYXZhaWxhYmlsaXR5XQogICAgRXhwZXJpZW5jZUFQSSAtLT4gUHJvbWlzaW5nW1Byb21pc2luZyBhbmQgb3B0aW1pemF0aW9uXQogICAgRXhwZXJpZW5jZUFQSSAtLT4gT3JkZXJzW09yZGVyIHNlcnZpY2VzXQogICAgT3JkZXJzIC0tPiBPcmNoZXN0cmF0aW9uW09yZGVyIG9yY2hlc3RyYXRpb25dCiAgICBPcmNoZXN0cmF0aW9uIC0tPiBFeGVjdXRpb25bV01TLCBzdG9yZXMsIHN1cHBsaWVycywgY2FycmllcnNdCiAgICBJbnZlbnRvcnkgPC0tPiBFbnRlcnByaXNlW0VSUCwgV01TLCBQT1MgYW5kIGludmVudG9yeSBzb3VyY2VzXQogICAgRXhlY3V0aW9uIC0tPiBFdmVudHNbU3RhdHVzIGFuZCBleGVjdXRpb24gdXBkYXRlc10KICAgIEV2ZW50cyAtLT4gT3JkZXJz"></div>
+
+<p>This is a reference architecture, not a published Blue Yonder deployment
+diagram. Exact service names, boundaries, and contracts vary by licensed
+products and release.</p>
+<h2>Evidence Conventions</h2>
+<p>This chapter uses three evidence labels:</p>
+<p>  Label                              Meaning</p>
+<hr>
+<p>  Public product description         A capability Blue Yonder describes publicly
+  Handbook implementation guidance   Vendor-neutral engineering recommendation
+  Verify in licensed documentation   Release- or tenant-specific detail not public</p>
+<p>Product pages establish positioning and capability boundaries; they are not API
+specifications. The authenticated developer portal and licensed release
+documentation remain authoritative for implementation contracts.</p>
+<hr>
+<h1>Product Boundaries</h1>
+<h2>Inventory Availability</h2>
+<p>Blue Yonder describes Inventory Service as a standalone, API-first service that
+aggregates inventory from systems such as WMS, ERP, POS, stores, suppliers, and
+in-transit sources. Its purpose is to provide a fast enterprise availability
+view to selling and fulfillment channels.</p>
+<p><strong>Public product description:</strong> Blue Yonder describes ingestion, normalization,
+segmentation, reservation, and distribution of enterprise availability.</p>
+<p><strong>Handbook interpretation:</strong> an implementation should establish explicit
+ownership for:</p>
+<ul>
+<li>Ingesting inventory observations and adjustments</li>
+<li>Normalizing source-system inventory into a common service model</li>
+<li>Maintaining availability by item, location, channel, and inventory segment</li>
+<li>Supporting reservations and protection policies</li>
+<li>Serving high-volume availability queries to digital channels</li>
+</ul>
+<p>The Inventory Service is not automatically the accounting system of record.
+Source systems still own physical execution and financial inventory truth; the
+service owns the operational availability view used for selling and promising.</p>
+<p>Official overview:
+<a href="https://info.blueyonder.com/order-management-commerce/what-is-the-blue-yonder-inventory-service">Blue Yonder Inventory Service</a></p>
+<hr>
+<h2>Order Promising and Optimization</h2>
+<p>Order Promising answers a pre-order question: <strong>what fulfillment options can be
+offered, by what date, and at what expected cost or service level?</strong></p>
+<p>Blue Yonder&#39;s public material describes constraint-based optimization using
+availability, fulfillment location, capacity, delivery speed, cost, margin, and
+other business objectives. The result may be a set of eligible fulfillment
+options rather than one hard-coded route.</p>
+<p><strong>Public product description:</strong> Blue Yonder describes sourcing decisions based
+on inventory, capacity, location, delivery speed, cost, margin, and other
+business objectives.</p>
+<p><strong>Verify in licensed documentation:</strong> the exact request and response fields,
+constraint model, and scoring behavior. A representative implementation may
+need inputs such as:</p>
+<ul>
+<li>Current and future inventory availability</li>
+<li>Location and fulfillment calendars</li>
+<li>Processing lead times and cutoff times</li>
+<li>Fulfillment capacity</li>
+<li>Carrier or delivery-service options</li>
+<li>Sourcing constraints, priorities, and cost objectives</li>
+<li>Channel, customer, product, and market policies</li>
+</ul>
+<p>Representative outputs may include:</p>
+<ul>
+<li>Eligible fulfillment method and location combinations</li>
+<li>Available pickup or delivery dates</li>
+<li>Reservation or commit information</li>
+<li>Cost, service, or policy attributes used by the calling channel</li>
+</ul>
+<p>Official overview:
+<a href="https://blueyonder.com/solutions/order-management-and-commerce/order-promising-and-optimization">Order Promising &amp; Optimization</a></p>
+<hr>
+<h2>Order Services and Orchestration</h2>
+<p>Order Services coordinates the order lifecycle after capture. Public material
+describes services for order visibility, changes, orchestration, fulfillment,
+and customer service. Order orchestration coordinates state across internal and
+external execution systems rather than performing warehouse, store, or carrier
+work itself.</p>
+<p>Blue Yonder uses <strong>Order Services</strong> as a portfolio term for composable order
+capabilities. <strong>Order orchestration</strong> is one capability within that portfolio.
+The exact licensed service decomposition and names vary by release.</p>
+<p><strong>Handbook interpretation:</strong> common orchestration responsibilities to map to the
+licensed services include:</p>
+<ul>
+<li>Accepting and validating orders from multiple channels</li>
+<li>Tracking line, release, fulfillment, shipment, cancellation, and return state</li>
+<li>Decomposing orders into executable work</li>
+<li>Sending work to fulfillment systems</li>
+<li>Receiving acknowledgements and status changes</li>
+<li>Applying change, cancellation, substitution, and exception policies</li>
+<li>Presenting consistent order state to channels and service users</li>
+</ul>
+<p>Official overview:
+<a href="https://blueyonder.com/solutions/order-management-and-commerce/order-orchestration">Omnichannel Order Orchestration</a></p>
+<p>Store fulfillment, returns, and customer-service experiences are adjacent
+capabilities in the broader Order Management portfolio. This chapter focuses on
+the integration and extension boundary shared across those experiences rather
+than attempting to document each product module.</p>
+<hr>
+<h1>Integration Patterns</h1>
+<p>Blue Yonder publishes the architectural direction--API-first services,
+microservices, platform APIs, and extensibility--but does not publish the full
+Order Management API catalog anonymously. Detailed endpoints, schemas,
+authentication, quotas, and event contracts are available through its
+authenticated developer and customer channels.</p>
+<p>An implementation should therefore distinguish documented integration styles
+from tenant-specific contracts.</p>
 <blockquote>
-<p>One logical inventory picture built from many operational systems.</p>
+<p><strong>Handbook implementation guidance:</strong> The four patterns below are reference
+patterns derived from standard distributed-systems practice and Blue Yonder&#39;s
+public API-first/composable positioning. They are not a substitute for the
+integration guide for a licensed service.</p>
 </blockquote>
-<hr>
-<h2>Order Promising</h2>
-<p>Order Promising extends beyond ATP.</p>
-<p>Inputs include:</p>
+<h2>1. Synchronous Experience APIs</h2>
+<p>Use synchronous APIs when a customer or associate is waiting for an immediate
+answer.</p>
+<p>Typical interactions:</p>
 <ul>
-<li>Inventory</li>
-<li>Carrier schedules</li>
-<li>Cutoff times</li>
-<li>Labor availability</li>
-<li>Business rules</li>
-<li>Inventory segmentation</li>
-<li>Customer priority</li>
+<li>Query inventory availability</li>
+<li>Request delivery or pickup promises</li>
+<li>Create or validate an order</li>
+<li>Retrieve order details and status</li>
+<li>Request an order change or cancellation</li>
+<li>Initiate a return</li>
 </ul>
-<p>Outputs:</p>
-<ul>
-<li>Promise date</li>
-<li>Fulfillment node</li>
-<li>Shipping method</li>
-<li>Confidence</li>
-</ul>
-<p>A promise is treated as a business commitment, not merely an inventory
-calculation.</p>
-<hr>
-<h2>Intelligent Sourcing</h2>
-<p>Blue Yonder evaluates multiple candidate nodes simultaneously.</p>
-<p>Typical optimization dimensions:</p>
-<p>  Factor                 Goal</p>
-<hr>
-<p>  Shipping cost          Minimize
-  Labor utilization      Balance
-  Delivery SLA           Meet
-  Split shipments        Reduce
-  Inventory aging        Reduce markdown risk
-  Inventory confidence   Maximize execution success</p>
-<p>No single rule dominates; the platform evaluates competing objectives.</p>
-<hr>
-<h1>Intelligent Rebalancer</h1>
-<p>One of Blue Yonder&#39;s distinguishing capabilities is dynamic re-sourcing.</p>
-<p>Scenario:</p>
-<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECkludmVudG9yeUxvc3MgLS0+IFJlZXZhbHVhdGUKUmVldmFsdWF0ZSAtLT4gQWx0ZXJuYXRlTm9kZQpBbHRlcm5hdGVOb2RlIC0tPiBVcGRhdGVDdXN0b21lclByb21pc2U="></div>
+<div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCiAgICBwYXJ0aWNpcGFudCBDaGFubmVsIGFzIENvbW1lcmNlIGNoYW5uZWwKICAgIHBhcnRpY2lwYW50IEdhdGV3YXkgYXMgRW50ZXJwcmlzZSBBUEkgbGF5ZXIKICAgIHBhcnRpY2lwYW50IEF2YWlsYWJpbGl0eSBhcyBCWSBhdmFpbGFiaWxpdHkKICAgIHBhcnRpY2lwYW50IFByb21pc2UgYXMgQlkgcHJvbWlzaW5nCgogICAgQ2hhbm5lbC0+PkdhdGV3YXk6IFJlcXVlc3QgZnVsZmlsbG1lbnQgb3B0aW9ucwogICAgR2F0ZXdheS0+PkF2YWlsYWJpbGl0eTogUXVlcnkgZWxpZ2libGUgaW52ZW50b3J5CiAgICBBdmFpbGFiaWxpdHktLT4+R2F0ZXdheTogQXZhaWxhYmlsaXR5IGJ5IGxvY2F0aW9uCiAgICBHYXRld2F5LT4+UHJvbWlzZTogRXZhbHVhdGUgZGF0ZXMgYW5kIG9wdGlvbnMKICAgIFByb21pc2UtLT4+R2F0ZXdheTogUmFua2VkIHByb21pc2VzCiAgICBHYXRld2F5LS0+PkNoYW5uZWw6IEN1c3RvbWVyLWZhY2luZyBvcHRpb25z"></div>
 
-<p>Example:</p>
+<p><strong>Handbook implementation guidance:</strong></p>
 <ul>
-<li>Store cannot find reserved inventory.</li>
-<li>OMS automatically evaluates alternate locations.</li>
-<li>Reservation is moved.</li>
-<li>Customer promise is updated.</li>
+<li>Put an enterprise API or anti-corruption layer between channels and vendor
+contracts when several channels need a stable internal model.</li>
+<li>Treat availability and promise calls as latency-sensitive dependencies with
+explicit timeouts and fallbacks.</li>
+<li>Use idempotency keys or stable external identifiers for order-changing calls
+when supported by the licensed API contract.</li>
+<li>Do not assume that a successful transport response means downstream physical
+execution has completed.</li>
 </ul>
-<p>Without automated rebalancing, retailers frequently cancel otherwise
-recoverable orders.</p>
 <hr>
-<h1>Inventory Segmentation</h1>
-<p>Inventory fencing protects strategic inventory.</p>
+<h2>2. Asynchronous State and Execution Updates</h2>
+<p>Inventory and order execution change continuously. As handbook implementation
+guidance, these updates should not be modeled as a chain of blocking calls from
+source system to storefront.</p>
+<p>Typical asynchronous flows:</p>
+<ul>
+<li>Inventory receipts, adjustments, sales, reservations, and cancellations</li>
+<li>Order acceptance and validation results</li>
+<li>Release creation and acknowledgement</li>
+<li>Pick, pack, stage, ship, delivery, and pickup milestones</li>
+<li>Fulfillment rejection, short pick, or capacity exception</li>
+<li>Return receipt, inspection, disposition, and refund milestones</li>
+</ul>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCiAgICBTb3VyY2VzW0VSUCwgV01TLCBQT1MsIHN0b3Jlcywgc3VwcGxpZXJzXSAtLT4gSW50ZWdyYXRpb25bSW50ZWdyYXRpb24gYW5kIHZhbGlkYXRpb24gbGF5ZXJdCiAgICBJbnRlZ3JhdGlvbiAtLT4gQllbQmx1ZSBZb25kZXIgc2VydmljZXNdCiAgICBCWSAtLT4gT3V0Ym91bmRbT3V0Ym91bmQgc3RhdHVzIGludGVncmF0aW9uXQogICAgT3V0Ym91bmQgLS0+IENoYW5uZWxzW0NvbW1lcmNlIGFuZCBjdXN0b21lciBzZXJ2aWNlXQogICAgT3V0Ym91bmQgLS0+IEFuYWx5dGljc1tPcGVyYXRpb25zIGFuZCBhbmFseXRpY3NdCiAgICBPdXRib3VuZCAtLT4gUmVjb3ZlcnlbRXhjZXB0aW9uIGFuZCByZWNvdmVyeSB3b3JrZmxvd3Nd"></div>
+
+<p>Blue Yonder&#39;s public pages support an API-first and interoperable platform
+direction, but they do not expose a public canonical OMS event catalog. Whether
+a specific deployment uses webhooks, polling, files, queues, streams, or a
+combination must be verified against the licensed product documentation.</p>
+<hr>
+<h2>3. Bulk and Master-Data Integration</h2>
+<p>Not every integration is transactional. Optimization and orchestration depend
+on reference data that changes at different rates.</p>
+<p>Examples include:</p>
+<ul>
+<li>Products, locations, organizations, and fulfillment networks</li>
+<li>Calendars, cutoff times, lead times, and capacity</li>
+<li>Carrier services and transit information</li>
+<li>Cost and margin inputs</li>
+<li>Sourcing policy dimensions</li>
+<li>Customer, channel, and market classifications</li>
+</ul>
+<p>As handbook implementation guidance, bulk loads are appropriate for initial
+migration and slowly changing reference data. Incremental updates should follow
+after the baseline. Every feed needs
+ownership, validation, reconciliation, freshness monitoring, and a documented
+recovery process. A technically successful load with stale or inconsistent data
+still produces bad promises.</p>
+<hr>
+<h2>4. Augmenting a Legacy OMS</h2>
+<p>Blue Yonder explicitly positions composable Order Services as capabilities that
+can augment existing systems. A common migration pattern is to introduce
+inventory availability or promising ahead of replacing order orchestration.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCiAgICBDaGFubmVsIC0tPiBGYWNhZGVbRW50ZXJwcmlzZSBjb21tZXJjZSBmYWNhZGVdCiAgICBGYWNhZGUgLS0+IEJZUHJvbWlzZVtCbHVlIFlvbmRlciBhdmFpbGFiaWxpdHkgYW5kIHByb21pc2luZ10KICAgIEZhY2FkZSAtLT4gTGVnYWN5T01TW0V4aXN0aW5nIE9NU10KICAgIExlZ2FjeU9NUyAtLT4gRXhlY3V0aW9uW0V4aXN0aW5nIGZ1bGZpbGxtZW50IGludGVncmF0aW9uc10KICAgIEV4ZWN1dGlvbiAtLT4gSW52ZW50b3J5RmVlZFtJbnZlbnRvcnkgYW5kIHN0YXR1cyBmZWVkXQogICAgSW52ZW50b3J5RmVlZCAtLT4gQllQcm9taXNl"></div>
+
+<p>The facade owns the temporary coexistence contract. It prevents channels from
+having to understand which platform currently owns each capability and creates
+a controlled path for migration.</p>
+<hr>
+<h1>Configuration and Customization Framework</h1>
+<p>The term <strong>customization</strong> needs care. Blue Yonder publicly describes
+upgrade-safe extensibility across workflows, data models, and functions, plus
+low-code/pro-code application development, UI components, microservices, APIs,
+and datasets. It does not publish enough anonymous technical documentation to
+claim one universal OMS plug-in framework or a specific supported programming
+model for every Order Management service.</p>
+<p>Official platform statements:</p>
+<ul>
+<li><a href="https://blueyonder.com/solutions/blue-yonder-platform">Blue Yonder Platform agile extensibility</a></li>
+<li><a href="https://info.blueyonder.com/blue-yonder-platform/what-are-platform-extensibility-services">Platform Extensibility Services</a></li>
+<li><a href="https://cdn.blueyonder.com/static/extending-business-value-and-impact/index.html">Extending business value with APIs, datasets, low-code and pro-code tools</a></li>
+</ul>
+<h2>Configuration First</h2>
+<p>Business behavior should be expressed through supported configuration whenever
+the product exposes it. Typical configuration categories to confirm during
+discovery include:</p>
+<ul>
+<li>Fulfillment methods and node eligibility</li>
+<li>Inventory segments, safety stock, and protection rules</li>
+<li>Promise calendars, lead times, and cutoffs</li>
+<li>Sourcing objectives, constraints, and priorities</li>
+<li>Split-shipment and consolidation policy</li>
+<li>Substitution, cancellation, and exception policy</li>
+<li>Order state transitions and user permissions</li>
+<li>Capacity and resource constraints</li>
+</ul>
+<p>The exact screens, rule language, precedence model, and deployment mechanism are
+release-specific. They must be demonstrated in the target tenant rather than
+inferred from marketing material.</p>
+<hr>
+<h2>External Extension Pattern</h2>
+<p>When configuration cannot express a differentiating capability, prefer an
+extension outside the managed product boundary:</p>
+<ol>
+<li>A service calls documented Blue Yonder APIs.</li>
+<li>It owns customer-specific logic and data outside the vendor service.</li>
+<li>It returns a bounded decision or transformed contract.</li>
+<li>It is versioned, monitored, secured, and deployed independently.</li>
+</ol>
 <p>Examples:</p>
 <ul>
-<li>Reserve inventory for loyalty customers</li>
-<li>Preserve presentation minimums</li>
-<li>Reserve launch inventory</li>
-<li>Hold inventory for stores</li>
-<li>Reserve wholesale commitments</li>
+<li>Translating an enterprise canonical order into a licensed Blue Yonder API</li>
+<li>Enriching a promise request with customer or product classifications</li>
+<li>Publishing Blue Yonder order state into an enterprise event model</li>
+<li>Implementing a channel-specific experience above shared order services</li>
+<li>Coordinating a human approval or exception workflow outside the core service</li>
 </ul>
-<p>Segmentation is configured through business policy rather than
-application code.</p>
-<hr>
-<h1>Store Fulfillment</h1>
-<p>Stores become fulfillment nodes.</p>
-<p>Responsibilities include:</p>
-<ul>
-<li>Pick</li>
-<li>Pack</li>
-<li>Stage</li>
-<li>Customer pickup</li>
-<li>Ship-from-store</li>
-</ul>
-<p>Engineering implications:</p>
-<ul>
-<li>Store labor becomes a constrained resource.</li>
-<li>Inventory accuracy requirements increase dramatically.</li>
-<li>Exception handling becomes critical.</li>
-</ul>
-<hr>
-<h1>Reverse Logistics</h1>
-<p>Returns are integrated into inventory optimization.</p>
-<p>Disposition options include:</p>
-<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSClJldHVybiAtLT4gUmVzdG9jawpSZXR1cm4gLS0+IE91dGxldApSZXR1cm4gLS0+IFJlZnVyYmlzaApSZXR1cm4gLS0+IExpcXVpZGF0ZQpSZXR1cm4gLS0+IERlc3Ryb3k="></div>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCiAgICBDb25zdW1lciAtLT4gRW50ZXJwcmlzZUFQSVtFbnRlcnByaXNlIEFQSSBvciB3b3JrZmxvd10KICAgIEVudGVycHJpc2VBUEkgLS0+IEV4dGVuc2lvbltDdXN0b21lci1vd25lZCBleHRlbnNpb25dCiAgICBFeHRlbnNpb24gLS0+IEJZQVBJW1N1cHBvcnRlZCBCbHVlIFlvbmRlciBBUEldCiAgICBCWUFQSSAtLT4gRXh0ZW5zaW9uCiAgICBFeHRlbnNpb24gLS0+IEVudGVycHJpc2VBUEkKICAgIEVudGVycHJpc2VBUEkgLS0+IENvbnN1bWVy"></div>
 
-<p>Decision criteria:</p>
+<p>This is handbook implementation guidance. It keeps custom code observable and
+replaceable and reduces coupling to internal product behavior. Direct database
+writes, unsupported schema changes, or modifications inside a managed SaaS
+service should not be treated as normal extension strategies. Whether any
+specific API, event, or platform extension is contractually upgrade-safe must be
+verified in the licensed documentation.</p>
+<hr>
+<h2>Platform Applications and User Experience Extensions</h2>
+<p>Blue Yonder&#39;s platform material describes common UI capabilities and support
+for building applications and microservices on platform APIs. Whether these
+tools are licensed and supported for a particular Order Management use case
+must be confirmed.</p>
+<p>Questions for a solution workshop:</p>
 <ul>
-<li>Product condition</li>
-<li>Transportation cost</li>
-<li>Demand</li>
-<li>Margin</li>
-<li>Seasonality</li>
+<li>Can a customer add a page, widget, action, or workflow to the standard UI?</li>
+<li>Which UI component library and identity context are supported?</li>
+<li>Where does custom application code execute?</li>
+<li>Which APIs and datasets are exposed to extensions?</li>
+<li>How are extensions packaged, promoted, versioned, and rolled back?</li>
+<li>Which extension points are guaranteed to remain compatible across upgrades?</li>
+<li>What telemetry, secrets management, and network controls are available?</li>
 </ul>
 <hr>
-<h1>Event-Driven Integration</h1>
-<p>Blue Yonder integrates with surrounding systems primarily through APIs
-and asynchronous events.</p>
-<p>Typical integrations:</p>
+<h1>Developer Documentation and Access</h1>
+<p>Blue Yonder operates an authenticated API developer portal:</p>
 <ul>
-<li>Commerce</li>
-<li>ERP</li>
-<li>WMS</li>
-<li>TMS</li>
-<li>POS</li>
-<li>CRM</li>
+<li><a href="https://developer-link.blueyonder.com/">Blue Yonder Link API Management developer portal</a></li>
 </ul>
-<p>Common event types:</p>
-<pre><code>InventoryChanged
-ReservationCreated
-OrderReleased
-ShipmentConfirmed
-ReturnReceived
-</code></pre>
-<hr>
-<h1>AI Capabilities</h1>
-<p>Recent Blue Yonder investments emphasize AI-assisted operations.</p>
-<p>Current themes include:</p>
+<p>The public sign-in page is visible, but most API definitions require an account
+associated with a customer or partner. Before finalizing an architecture, obtain
+the documentation for the exact licensed services and release.</p>
+<p>Required technical artifacts include:</p>
 <ul>
-<li>Exception prioritization</li>
-<li>Fulfillment recommendations</li>
-<li>Explainable sourcing decisions</li>
-<li>Conversational operational assistants</li>
-<li>Predictive disruption analysis</li>
+<li>OpenAPI or equivalent API definitions</li>
+<li>Authentication and authorization flows</li>
+<li>Environment and endpoint conventions</li>
+<li>Rate, payload, and concurrency limits</li>
+<li>Idempotency and optimistic-concurrency behavior</li>
+<li>Error taxonomy and retry guidance</li>
+<li>Event, webhook, or outbound-message contracts</li>
+<li>Data model and extension-point documentation</li>
+<li>Versioning, deprecation, and release policy</li>
+<li>Sandbox or non-production tenant access</li>
 </ul>
-<p>Today&#39;s AI generally assists planners and operators rather than
-replacing the optimization engine.</p>
+<p>If these artifacts are unavailable during procurement or design, endpoint-level
+claims should be marked <strong>unverified</strong> rather than filled in from assumptions.</p>
 <hr>
-<h1>Typical Implementation</h1>
-<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECkNvbW1lcmNlIC0tPiBPTVMKUE9TIC0tPiBJbnZlbnRvcnkKRVJQIC0tPiBJbnZlbnRvcnkKSW52ZW50b3J5IC0tPiBPTVMKT01TIC0tPiBXTVMKT01TIC0tPiBDYXJyaWVyCk9NUyAtLT4gQ3VzdG9tZXJOb3RpZmljYXRpb25z"></div>
+<h1>Implementation Architecture</h1>
+<p>A production integration should separate channel contracts, vendor contracts,
+asynchronous delivery, and operational recovery.</p>
+<div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFRECiAgICBDaGFubmVsc1tEaWdpdGFsLCBzdG9yZXMsIG1hcmtldHBsYWNlcywgc2VydmljZV0gLS0+IEFQSVtFbnRlcnByaXNlIEFQSSBsYXllcl0KICAgIEFQSSAtLT4gQllbQmx1ZSBZb25kZXIgT3JkZXIgU2VydmljZXNdCiAgICBBUEkgLS0+IExlZ2FjeVtMZWdhY3kgb3JkZXIgYW5kIGNvbW1lcmNlIHN5c3RlbXNdCiAgICBFbnRlcnByaXNlW0VSUCwgV01TLCBQT1MsIFRNUywgc3VwcGxpZXJzXSAtLT4gSW50ZWdyYXRpb25bSW50ZWdyYXRpb24gcGxhdGZvcm1dCiAgICBJbnRlZ3JhdGlvbiAtLT4gQlkKICAgIEJZIC0tPiBJbnRlZ3JhdGlvbgogICAgSW50ZWdyYXRpb24gLS0+IEV2ZW50c1tFbnRlcnByaXNlIGV2ZW50c10KICAgIEV2ZW50cyAtLT4gQ2hhbm5lbHMKICAgIEV2ZW50cyAtLT4gT3BlcmF0aW9uc1tNb25pdG9yaW5nIGFuZCBleGNlcHRpb24gb3BlcmF0aW9uc10KICAgIEV2ZW50cyAtLT4gRGF0YVtBbmFseXRpY3MgYW5kIHJlY29uY2lsaWF0aW9uXQ=="></div>
 
-<p>Implementation projects usually include:</p>
-<ol>
-<li>Integration</li>
-<li>Data cleansing</li>
-<li>Business rule migration</li>
-<li>Store onboarding</li>
-<li>Performance tuning</li>
-<li>Cutover</li>
-</ol>
-<p>The largest effort is almost always organizational change rather than
-software installation.</p>
+<p>The enterprise integration layer commonly owns:</p>
+<ul>
+<li>Canonical mappings and contract versioning</li>
+<li>Authentication, secrets, and certificate management</li>
+<li>Validation, enrichment, and reference-data lookup</li>
+<li>Retry, replay, deduplication, and dead-letter handling</li>
+<li>Correlation IDs and distributed tracing</li>
+<li>Data-quality monitoring and reconciliation</li>
+<li>Rate limiting, backpressure, and dependency protection</li>
+<li>Tenant-specific adapters isolated from channel code</li>
+</ul>
+<hr>
+<h1>Operational Requirements</h1>
+<h2>Idempotency and Duplicate Delivery</h2>
+<p>Order and inventory updates may be retried or delivered more than once.
+Integrations need stable business identifiers and a documented duplicate policy.
+Do not rely on transport-level exactly-once claims to protect order state.</p>
+<h2>Ordering and Concurrency</h2>
+<p>Updates for one order or inventory key can race. Establish the version,
+timestamp, or sequence semantics supported by each licensed API and feed.
+Explicitly test late, duplicate, and out-of-order messages.</p>
+<h2>Reconciliation</h2>
+<p>Operational events can be lost even when every component is highly available.
+Run scheduled reconciliation for orders, reservations, inventory, releases, and
+shipments. Reconciliation is part of the design, not a temporary migration tool.</p>
+<h2>Peak and Degraded Modes</h2>
+<p>Availability and promising sit on the customer purchase path. Define:</p>
+<ul>
+<li>Peak request and update volumes</li>
+<li>Latency budgets by interaction</li>
+<li>Timeout and circuit-breaker behavior</li>
+<li>Safe degradation when promising is unavailable</li>
+<li>Recovery from an inventory-feed backlog</li>
+<li>Rules for suppressing unsafe availability</li>
+</ul>
+<hr>
+<h1>Evaluation and Discovery Checklist</h1>
+<p>Before committing to a design, ask Blue Yonder or an implementation partner to
+demonstrate the following in the target release:</p>
+<h2>Product Scope</h2>
+<ul>
+<li>Which Order Services are licensed and which system owns each lifecycle state?</li>
+<li>Can services be deployed independently or only as a prescribed bundle?</li>
+<li>Which capabilities are current cloud services versus legacy product modules?</li>
+</ul>
+<h2>Integration</h2>
+<ul>
+<li>Which use cases have synchronous APIs?</li>
+<li>Which outbound events, webhooks, extracts, or subscriptions are supported?</li>
+<li>What are the rate limits, payload limits, and bulk-ingestion mechanisms?</li>
+<li>How are retries, idempotency, ordering, and concurrency represented?</li>
+<li>Are OpenAPI definitions and test collections available?</li>
+</ul>
+<h2>Extension</h2>
+<ul>
+<li>Which behavior is configuration, workflow extension, data-model extension,
+UI extension, or external service code?</li>
+<li>Which extension points are explicitly upgrade-safe?</li>
+<li>How are changes promoted across environments and rolled back?</li>
+<li>What automated testing is available for configuration and extensions?</li>
+</ul>
+<h2>Operations</h2>
+<ul>
+<li>What tenant health, audit, metrics, traces, and replay facilities are exposed?</li>
+<li>How are failed integrations surfaced and recovered?</li>
+<li>What are the availability and support commitments for peak trading periods?</li>
+</ul>
 <hr>
 <h1>Common Failure Modes</h1>
-<p>Technical:</p>
-<ul>
-<li>Poor inventory quality</li>
-<li>Slow integrations</li>
-<li>Missing event publication</li>
-<li>Inconsistent master data</li>
-</ul>
-<p>Operational:</p>
-<ul>
-<li>Weak store processes</li>
-<li>Low cycle-count discipline</li>
-<li>Poor exception ownership</li>
-<li>Unclear sourcing policies</li>
-</ul>
-<p>The optimization engine cannot compensate for inaccurate operational
-data.</p>
+<h2>Treating Marketing Architecture as an API Contract</h2>
+<p>&quot;API-first&quot; does not specify endpoints, event delivery, rate limits, or
+idempotency. Design from the authenticated product contract, not a solution
+overview.</p>
+<h2>Putting Vendor Models in Every Channel</h2>
+<p>Direct integration from every storefront, store application, marketplace, and
+service tool multiplies upgrade work. Use deliberate enterprise boundaries.</p>
+<h2>Customizing Before Understanding Configuration</h2>
+<p>Custom code can reproduce behavior that the licensed product already supports.
+Prove the configuration gap before building an extension.</p>
+<h2>Assuming SaaS Means No Integration Operations</h2>
+<p>Managed software still depends on customer-owned mappings, credentials, queues,
+reconciliation, monitoring, and source-system quality.</p>
+<h2>Ignoring Inventory Quality</h2>
+<p>Optimization cannot compensate for stale inventory, inconsistent calendars,
+missing costs, or untrusted execution updates. Data quality is part of order
+promise quality.</p>
 <hr>
-<h1>Strengths</h1>
+<h1>Strengths of the Documented Approach</h1>
 <ul>
-<li>Mature enterprise scale</li>
-<li>Sophisticated order promising</li>
-<li>Dynamic sourcing</li>
-<li>Strong inventory optimization</li>
-<li>Cloud-native direction</li>
-<li>Composable services</li>
-<li>Rich omnichannel capabilities</li>
-</ul>
-<hr>
-<h1>Limitations</h1>
-<p>Compared with custom-built platforms:</p>
-<ul>
-<li>Significant implementation effort</li>
-<li>Complex business-rule configuration</li>
-<li>Requires disciplined master data</li>
-<li>Deep integrations across many enterprise systems</li>
-<li>Licensing and transformation costs can be substantial</li>
-</ul>
-<p>Compared with competitors:</p>
-<ul>
-<li>IBM Sterling is often viewed as exceptionally configurable for
-highly complex order orchestration.</li>
-<li>Manhattan Active benefits from tight integration with Manhattan WMS.</li>
-<li>Salesforce OMS integrates naturally with Salesforce Commerce and
-Service Cloud ecosystems.</li>
+<li>Composable services can support phased modernization.</li>
+<li>API-first boundaries enable multiple channels to reuse shared capabilities.</li>
+<li>Inventory availability and promising can be separated from order execution.</li>
+<li>Constraint-based optimization supports cost, service, capacity, and policy
+tradeoffs.</li>
+<li>The platform direction emphasizes upgrade-safe extensibility rather than core
+modification.</li>
 </ul>
 <hr>
-<h1>Executive Interview Notes</h1>
-<p>Questions you can answer confidently:</p>
-<p><strong>What differentiates Blue Yonder?</strong></p>
+<h1>Risks and Due Diligence</h1>
 <ul>
-<li>Real-time order promising</li>
-<li>Intelligent sourcing</li>
-<li>Dynamic rebalancing</li>
-<li>Strong inventory optimization</li>
-<li>Composable cloud architecture</li>
+<li>Detailed developer documentation is gated, limiting anonymous technical
+validation.</li>
+<li>Product names and service boundaries have evolved; contracts must be checked
+against the licensed release.</li>
+<li>A composable platform can still produce a complex distributed system with
+substantial integration and operational ownership.</li>
+<li>Configuration flexibility is useful only when precedence, testing, promotion,
+and audit behavior are understood.</li>
+<li>Vendor cloud operations do not remove the need for enterprise reconciliation
+and failure recovery.</li>
 </ul>
-<p><strong>Where do implementations fail?</strong></p>
-<p>Almost never because of routing algorithms.</p>
-<p>More often because of:</p>
+<hr>
+<h1>Documentation and Product Links</h1>
+<p>Public product material:</p>
 <ul>
-<li>inventory accuracy</li>
-<li>poor integrations</li>
-<li>inconsistent business policies</li>
-<li>organizational adoption</li>
+<li><a href="https://blueyonder.com/solutions/order-management-and-commerce">Order Management &amp; Commerce overview</a></li>
+<li><a href="https://blueyonder.com/solutions/order-management-and-commerce/order-promising-and-optimization">Order Promising &amp; Optimization</a></li>
+<li><a href="https://blueyonder.com/solutions/order-management-and-commerce/order-orchestration">Order Orchestration</a></li>
+<li><a href="https://info.blueyonder.com/order-management-commerce/what-are-blue-yonder-order-services">What are Blue Yonder Order Services?</a></li>
+<li><a href="https://info.blueyonder.com/order-management-commerce/what-is-the-blue-yonder-inventory-service">What is Blue Yonder Inventory Service?</a></li>
 </ul>
-<p><strong>How does your experience map?</strong></p>
-<p>Your experience aligns with nearly every upstream dependency:</p>
+<p>Public platform and extensibility material:</p>
 <ul>
-<li>Enterprise inventory picture</li>
-<li>Soft promises and reservations</li>
-<li>Inventory positioning</li>
-<li>Returns positioning</li>
-<li>Store fulfillment modernization</li>
-<li>Customer pickup experiences</li>
-<li>Middle-mile optimization</li>
+<li><a href="https://blueyonder.com/solutions/blue-yonder-platform">Blue Yonder Platform agile extensibility and common APIs</a></li>
+<li><a href="https://info.blueyonder.com/blue-yonder-platform/what-are-platform-extensibility-services">Platform Extensibility Services</a></li>
+<li><a href="https://cdn.blueyonder.com/static/extending-business-value-and-impact/index.html">Platform low-code/pro-code and integration overview</a></li>
 </ul>
-<p>While you did not own routing itself, you owned many of the systems and
-business capabilities that determine whether routing decisions are
-successful.</p>
+<p>Authenticated technical documentation:</p>
+<ul>
+<li><a href="https://developer-link.blueyonder.com/">Blue Yonder Link API Management developer portal</a></li>
+</ul>
+<p>These links establish product direction and entry points. They do not replace
+the versioned API and implementation documentation supplied to customers and
+partners.</p>
 <hr>
 <h1>Executive Takeaways</h1>
 <ul>
-<li>Blue Yonder&#39;s competitive advantage lies in optimization rather than
-transaction processing.</li>
-<li>Accurate inventory and disciplined operations matter more than
-sophisticated algorithms operating on poor data.</li>
-<li>The product is best understood as a distributed decision platform
-coordinating commerce, inventory, fulfillment, and transportation.</li>
+<li>Blue Yonder Order Management is best evaluated as a portfolio of composable
+order, inventory, promising, and orchestration services--not as one universal
+monolith.</li>
+<li>The primary integration styles are synchronous experience APIs,
+asynchronous operational updates, and bulk/reference-data ingestion.</li>
+<li>Configuration should express standard fulfillment policy; differentiating
+logic should use documented, upgrade-safe extensions or external services.</li>
+<li>Public sources do not expose enough detail to invent endpoint names, event
+catalogs, or a universal plug-in framework. Those details require the
+authenticated developer portal and the exact licensed release.</li>
+<li>Inventory accuracy, contract governance, idempotency, reconciliation, and
+degraded-mode design determine whether an implementation succeeds at scale.</li>
 </ul>
 </article>
 <article class="chapter" id="chapter-6"><h1>Order Management Systems</h1>
