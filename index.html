@@ -204,10 +204,12 @@ while execution systems (WMS, store applications, TMS) perform the work.</p>
 <hr>
 <h1>BOPIS (Buy Online, Pick Up In Store)</h1>
 <h2>Business Goal</h2>
-<p>Provide near-immediate fulfillment while leveraging store inventory.</p>
+<p>Offer a defined pickup promise while using eligible store inventory and
+capacity. The promise may range from minutes to days depending on operating
+model, assortment, and store process.</p>
 <div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCnBhcnRpY2lwYW50IEN1c3RvbWVyCnBhcnRpY2lwYW50IENvbW1lcmNlCnBhcnRpY2lwYW50IE9NUwpwYXJ0aWNpcGFudCBJbnZlbnRvcnkKcGFydGljaXBhbnQgU3RvcmUKCkN1c3RvbWVyLT4+Q29tbWVyY2U6IFN1Ym1pdCBPcmRlcgpDb21tZXJjZS0+Pk9NUzogQ2hlY2sgQVRQCk9NUy0+PkludmVudG9yeTogUmVzZXJ2ZSBJbnZlbnRvcnkKT01TLT4+U3RvcmU6IENyZWF0ZSBQaWNrIFRhc2sKU3RvcmUtLT4+T01TOiBQaWNrIENvbmZpcm1lZApPTVMtLT4+Q3VzdG9tZXI6IFJlYWR5IGZvciBQaWNrdXA="></div>
 
-<h2>Best Practices</h2>
+<h2>Common Design Controls</h2>
 <ul>
 <li>Reserve inventory immediately after checkout.</li>
 <li>Enforce pick SLAs.</li>
@@ -224,7 +226,8 @@ while execution systems (WMS, store applications, TMS) perform the work.</p>
 </ul>
 <hr>
 <h1>Ship From Store (SFS)</h1>
-<p>SFS turns retail stores into miniature fulfillment centers.</p>
+<p>SFS allows selected retail stores to act as fulfillment nodes. The operating
+model may range from occasional parcel fulfillment to dedicated store capacity.</p>
 <p>Routing considerations:</p>
 <ul>
 <li>Distance to customer</li>
@@ -243,7 +246,7 @@ and inventory accuracy expectations.</p>
 <h1>Ship to Store</h1>
 <p>Instead of shipping to the customer:</p>
 <p>Customer → Store</p>
-<p>Advantages:</p>
+<p>Potential advantages:</p>
 <ul>
 <li>Lower last-mile cost</li>
 <li>Increased store traffic</li>
@@ -287,18 +290,19 @@ Remote DC
   Jacket   DC West
   Hat      Vendor</p>
 <p>Tradeoffs:</p>
-<p>Pros</p>
+<p>Potential benefits</p>
 <ul>
 <li>Faster delivery</li>
 <li>Better inventory utilization</li>
 </ul>
-<p>Cons</p>
+<p>Potential costs</p>
 <ul>
 <li>Increased shipping cost</li>
-<li>Poor customer experience</li>
+<li>Fragmented delivery experience</li>
 <li>Multiple tracking numbers</li>
 </ul>
-<p>Modern routing engines apply penalties to unnecessary splits.</p>
+<p>Routing policy commonly assigns a cost or penalty to splits, balanced against
+delivery promises, inventory position, capacity, margin, and other objectives.</p>
 <hr>
 <h1>Backorders</h1>
 <p>When inventory is unavailable today but expected later.</p>
@@ -335,7 +339,9 @@ Remote DC
 </ul>
 <hr>
 <h1>Exception Handling</h1>
-<p>Every OMS should continuously re-plan.</p>
+<p>An OMS needs an explicit exception strategy. Depending on product capability and
+business policy, that strategy may automatically re-plan, create recovery work,
+or route the exception to an operator.</p>
 <p>Examples:</p>
 <ul>
 <li>Store closed unexpectedly</li>
@@ -345,11 +351,12 @@ Remote DC
 <li>Customer address change</li>
 <li>Failed payment</li>
 </ul>
-<p>Rather than failing an order, mature OMS platforms attempt automatic
-re-sourcing before human intervention.</p>
+<p>When policy and available inventory permit it, automatic re-sourcing can recover
+an order before human intervention. Some changes still require approval or
+customer communication.</p>
 <hr>
 <h1>KPIs</h1>
-<p>Engineering leaders typically monitor:</p>
+<p>An illustrative operational scorecard includes:</p>
 <p>  Metric                 Why It Matters</p>
 <hr>
 <p>  Fill Rate              Customer satisfaction
@@ -367,8 +374,8 @@ re-sourcing before human intervention.</p>
 <li>BOPIS, SFS, Ship-to-Store, and Curbside are variations of the same
 orchestration model.</li>
 <li>OMS owns decisions; execution systems perform work.</li>
-<li>Inventory accuracy is the single largest predictor of omnichannel
-success.</li>
+<li>Inventory accuracy is a foundational input to reliable omnichannel
+promises and routing.</li>
 <li>Returns should be optimized as inventory assets, not merely refunds.</li>
 </ul>
 </article>
