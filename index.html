@@ -382,15 +382,17 @@ promises and routing.</li>
 <article class="chapter" id="chapter-3"><h1>Order Management Systems</h1>
 <h1>Part 3 -- Inventory, ATP, Routing &amp; Order Orchestration</h1>
 <h2>Executive Summary</h2>
-<p>The heart of every modern OMS is the continuous balancing of <strong>customer
+<p>An important capability of a modern OMS is balancing <strong>customer
 promises</strong>, <strong>inventory health</strong>, <strong>operational cost</strong>, and
 <strong>fulfillment capacity</strong>. This chapter explores the core decision models
 that distinguish enterprise-grade OMS platforms from simple order
 processing systems.</p>
+<p>Terminology varies by product and operating model. The states and formulas in
+this chapter are conceptual tools, not a universal vendor data model.</p>
 <hr>
 <h1>1. Inventory as a State Machine</h1>
-<p>Inventory is never a single number. A sellable quantity is derived from
-multiple inventory states.</p>
+<p>For promising and fulfillment decisions, inventory is more useful as a set of
+states and policies than as one undifferentiated quantity.</p>
 <div class="mermaid-source" data-code="c3RhdGVEaWFncmFtLXYyClsqXSAtLT4gT25IYW5kCk9uSGFuZCAtLT4gU29mdFJlc2VydmVkClNvZnRSZXNlcnZlZCAtLT4gSGFyZFJlc2VydmVkCkhhcmRSZXNlcnZlZCAtLT4gQWxsb2NhdGVkCkFsbG9jYXRlZCAtLT4gUGlja2VkClBpY2tlZCAtLT4gUGFja2VkClBhY2tlZCAtLT4gU2hpcHBlZApTaGlwcGVkIC0tPiBEZWxpdmVyZWQKRGVsaXZlcmVkIC0tPiBSZXR1cm5lZApSZXR1cm5lZCAtLT4gUmVzdG9ja2VkClJldHVybmVkIC0tPiBMaXF1aWRhdGVk"></div>
 
 <p>Typical inventory buckets:</p>
@@ -418,7 +420,7 @@ On Hand
 - Operational Constraints
 + Eligible Future Receipts
 </code></pre>
-<p>Good ATP engines evaluate:</p>
+<p>ATP implementations may evaluate:</p>
 <ul>
 <li>Inventory availability</li>
 <li>Store operating hours</li>
@@ -427,7 +429,9 @@ On Hand
 <li>Business rules</li>
 <li>Customer priority</li>
 </ul>
-<p>ATP is recalculated continuously as events arrive.</p>
+<p>ATP may be recalculated on demand, updated from events, or maintained through a
+hybrid approach. The required freshness follows the selling and oversell-risk
+model.</p>
 <hr>
 <h1>3. Capable-to-Promise (CTP)</h1>
 <p>CTP extends ATP by considering production or replenishment capability.</p>
@@ -441,7 +445,8 @@ On Hand
 <hr>
 <h1>4. Soft vs Hard Reservations</h1>
 <h2>Soft Reservation</h2>
-<p>The customer has a promise but sourcing remains flexible.</p>
+<p>In this handbook&#39;s conceptual model, the customer has a promise but sourcing
+remains flexible.</p>
 <p>Benefits:</p>
 <ul>
 <li>Better optimization</li>
@@ -449,7 +454,7 @@ On Hand
 <li>Reduced early commitment</li>
 </ul>
 <h2>Hard Reservation</h2>
-<p>Specific inventory at a specific node is committed.</p>
+<p>In this conceptual model, specific inventory at a specific node is committed.</p>
 <p>Benefits:</p>
 <ul>
 <li>Higher execution certainty</li>
@@ -458,13 +463,17 @@ On Hand
 <p>Tradeoff: reduced flexibility.</p>
 <hr>
 <h1>5. Allocation</h1>
-<p>Allocation tells an execution system to begin work.</p>
+<p>Allocation commonly represents authorization or instruction for an execution
+system to begin work. Some products use different terms or combine allocation
+and release.</p>
 <div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCk9yZGVyIC0tPiBPTVMKT01TIC0tPiBSZXNlcnZlClJlc2VydmUgLS0+IEFsbG9jYXRlCkFsbG9jYXRlIC0tPiBXTVMKV01TIC0tPiBQaWNr"></div>
 
 <p>Reservation protects inventory. Allocation starts fulfillment.</p>
 <hr>
 <h1>6. Distributed Order Management (DOM)</h1>
-<p>DOM evaluates every eligible fulfillment node.</p>
+<p>DOM evaluates a bounded set of eligible fulfillment options. Candidate
+generation may exclude nodes before optimization for policy, capacity,
+inventory, market, or performance reasons.</p>
 <p>Inputs include:</p>
 <ul>
 <li>Inventory</li>
@@ -493,7 +502,9 @@ Shipping Cost
 + Capacity Penalty
 - Customer Priority Bonus
 </code></pre>
-<p>Lowest valid score wins.</p>
+<p>The objective function, weights, constraints, and tie-breaking rules are
+implementation-specific. Some engines minimize cost; others maximize utility or
+use staged rules and optimization.</p>
 <hr>
 <h1>8. Inventory Segmentation (Inventory Fencing)</h1>
 <p>Not every unit should be available to every customer.</p>
@@ -504,7 +515,8 @@ Shipping Cost
 <li>Reserve wholesale allocations</li>
 <li>Hold inventory for BOPIS</li>
 </ul>
-<p>Segmentation improves strategic inventory utilization.</p>
+<p>Segmentation can align inventory exposure with channel, customer, merchandising,
+or contractual policy, but it also adds governance and explainability needs.</p>
 <hr>
 <h1>9. Inventory Confidence</h1>
 <p>Reported inventory and trustworthy inventory are different.</p>
@@ -516,7 +528,8 @@ Shipping Cost
 <li>Recent sales</li>
 <li>Pick success rate</li>
 </ul>
-<p>OMS may intentionally avoid low-confidence nodes.</p>
+<p>An OMS may lower the priority of low-confidence inventory, require additional
+protection, or exclude a node, depending on policy and service risk.</p>
 <hr>
 <h1>10. Rebalancing &amp; Re-sourcing</h1>
 <p>When conditions change after an order is accepted:</p>
@@ -530,7 +543,9 @@ Shipping Cost
 <li>Failed pick</li>
 <li>Weather</li>
 </ul>
-<p>Modern systems attempt automatic recovery before canceling.</p>
+<p>Systems may attempt automatic recovery before cancellation when policy,
+inventory, and customer commitments permit it. Other exceptions require an
+operator or customer decision.</p>
 <hr>
 <h1>11. Event Model</h1>
 <p>Typical events:</p>
@@ -544,17 +559,19 @@ ShipmentCreated
 DeliveryConfirmed
 ReturnReceived
 </code></pre>
-<p>These events are generally immutable and consumed asynchronously by
-downstream services.</p>
+<p>In event-driven designs, published facts are commonly append-only and consumed
+asynchronously. Products may also expose mutable records, APIs, files, or
+webhooks; event names and guarantees are contract-specific.</p>
 <hr>
 <h1>12. Order Lifecycle</h1>
 <div class="mermaid-source" data-code="c3RhdGVEaWFncmFtLXYyCkNyZWF0ZWQgLS0+IFJlc2VydmVkClJlc2VydmVkIC0tPiBBbGxvY2F0ZWQKQWxsb2NhdGVkIC0tPiBQaWNrZWQKUGlja2VkIC0tPiBQYWNrZWQKUGFja2VkIC0tPiBTaGlwcGVkClNoaXBwZWQgLS0+IERlbGl2ZXJlZApEZWxpdmVyZWQgLS0+IENsb3NlZApEZWxpdmVyZWQgLS0+IFJldHVybmVkClJldHVybmVkIC0tPiBSZWZ1bmRlZA=="></div>
 
-<p>OMS owns lifecycle state and orchestration while execution systems own
-operational work.</p>
+<p>An OMS commonly owns the customer-order and orchestration view while execution
+systems own operational work. Exact state ownership must be defined explicitly,
+especially when commerce, ERP, OMS, and execution systems overlap.</p>
 <hr>
 <h1>13. Executive Metrics</h1>
-<p>Important KPIs:</p>
+<p>An illustrative KPI set:</p>
 <p>  Metric                Why it Matters</p>
 <hr>
 <p>  ATP Accuracy          Promise quality
@@ -565,18 +582,18 @@ operational work.</p>
   Order Cycle Time      Customer experience
   Re-source Success %   Operational resilience</p>
 <hr>
-<h1>Interview Talking Points</h1>
-<p>A strong engineering leader should emphasize:</p>
+<h1>Design Takeaways</h1>
 <ul>
 <li>ATP is a business decision, not merely an inventory lookup.</li>
 <li>Reservations, allocation, and execution are distinct lifecycle
-stages.</li>
+concepts, though product terminology varies.</li>
 <li>Routing is a constrained optimization problem balancing customer
 promise, cost, and inventory health.</li>
-<li>High-quality inventory signals matter more than sophisticated
-optimization on poor data.</li>
+<li>Optimization quality is bounded by inventory, capacity, cost, and execution
+signal quality.</li>
 <li>Event-driven architectures enable continuous re-planning instead of
-static order processing.</li>
+static order processing, but require explicit delivery, ordering, and
+reconciliation semantics.</li>
 </ul>
 </article>
 <article class="chapter" id="chapter-4"><h1>Order Management Systems</h1>
