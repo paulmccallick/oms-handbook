@@ -599,30 +599,33 @@ reconciliation semantics.</li>
 <article class="chapter" id="chapter-4"><h1>Order Management Systems</h1>
 <h1>Part 4 -- Technical Architecture for Enterprise OMS</h1>
 <h2>Executive Summary</h2>
-<p>Modern Order Management Systems are distributed, event-driven platforms.
-They are designed to make high-value decisions in milliseconds while
-coordinating dozens of independently deployed services. This chapter
-focuses on the engineering patterns used by Blue Yonder, Manhattan, IBM
-Sterling, and large in-house OMS implementations.</p>
+<p>Enterprise Order Management Systems coordinate decisions and state across
+channels, inventory, payments, and fulfillment systems. Implementations range
+from modular monoliths and packaged SaaS products to distributed services. This
+chapter describes common architecture patterns and the conditions under which
+they are useful; it does not prescribe one topology or attribute undocumented
+patterns to specific vendors.</p>
 <hr>
 <h1>1. Architectural Principles</h1>
-<p>A modern OMS should be:</p>
+<p>Depending on scale, ownership, deployment model, and integration needs, an OMS
+may benefit from:</p>
 <ul>
 <li>Event driven</li>
 <li>Loosely coupled</li>
 <li>Horizontally scalable</li>
 <li>Fault tolerant</li>
 <li>API first</li>
-<li>Cloud native</li>
+<li>Automated, repeatable deployment</li>
 <li>Observable</li>
-<li>Eventually consistent</li>
+<li>Explicit consistency boundaries</li>
 </ul>
 <div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkNvbW1lcmNlIC0tPiBBUEkKQVBJIC0tPiBPTVMKT01TIC0tPiBJbnZlbnRvcnkKT01TIC0tPiBSb3V0aW5nCk9NUyAtLT4gQVRQCk9NUyAtLT4gT3JjaGVzdHJhdGlvbgpPcmNoZXN0cmF0aW9uIC0tPiBXTVMKT3JjaGVzdHJhdGlvbiAtLT4gVE1TCkludmVudG9yeSAtLT4gS2Fma2EKV01TIC0tPiBLYWZrYQpLYWZrYSAtLT4gT01T"></div>
 
 <hr>
 <h1>2. Domain Decomposition</h1>
-<p>Successful OMS implementations separate business capabilities into
-independently deployable services.</p>
+<p>OMS designs benefit from clear business-capability boundaries. Those boundaries
+may be modules in one deployment, independently deployed services, or managed
+vendor capabilities.</p>
 <p>  Service             Responsibility</p>
 <hr>
 <p>  Order Service       Order lifecycle
@@ -632,10 +635,12 @@ independently deployable services.</p>
   Orchestration       Long-running workflows
   Notification        Customer communication
   Returns             Reverse logistics</p>
-<p>This allows each service to scale independently.</p>
+<p>Independent deployment can provide separate scaling and ownership, while a
+modular deployment can reduce operational and consistency complexity.</p>
 <hr>
 <h1>3. Event-Driven Architecture</h1>
-<p>Every business action emits immutable events.</p>
+<p>Event-driven designs publish selected business facts when other components need
+asynchronous notification or independent processing.</p>
 <pre><code class="language-text">OrderCreated
 InventoryAdjusted
 ReservationCreated
@@ -646,8 +651,9 @@ DeliveryConfirmed
 ReturnReceived
 RefundIssued
 </code></pre>
-<p>Publish events rather than invoking downstream systems synchronously
-wherever practical.</p>
+<p>Use events where temporal decoupling, fan-out, replay, or independent recovery
+justify the operational cost. Use synchronous calls when the caller needs an
+immediate answer or a small consistency boundary.</p>
 <p>Benefits:</p>
 <ul>
 <li>Loose coupling</li>
@@ -657,11 +663,13 @@ wherever practical.</p>
 <li>Better resiliency</li>
 </ul>
 <hr>
-<h1>4. Kafka as the Enterprise Backbone</h1>
-<p>Kafka is frequently used as the enterprise event bus.</p>
+<h1>4. Event Streaming and Messaging</h1>
+<p>Kafka is one common enterprise event-streaming option. Managed queues, cloud
+event buses, other streaming platforms, and vendor integration services may be
+better fits for different delivery and operating requirements.</p>
 <div class="mermaid-source" data-code="Zmxvd2NoYXJ0IFREClBPUyAtLT4gS2Fma2EKQ29tbWVyY2UgLS0+IEthZmthCldNUyAtLT4gS2Fma2EKRVJQIC0tPiBLYWZrYQpJbnZlbnRvcnkgLS0+IEthZmthCgpLYWZrYSAtLT4gT01TCkthZmthIC0tPiBBbmFseXRpY3MKS2Fma2EgLS0+IFJlcGxlbmlzaG1lbnQKS2Fma2EgLS0+IE5vdGlmaWNhdGlvbnM="></div>
 
-<p>Typical topics:</p>
+<p>Illustrative Kafka topics:</p>
 <ul>
 <li>inventory-events</li>
 <li>order-events</li>
@@ -669,10 +677,14 @@ wherever practical.</p>
 <li>returns-events</li>
 <li>customer-events</li>
 </ul>
-<p>Good partition keys often include Order ID or Inventory Location.</p>
+<p>Partition keys are chosen from the ordering boundary. Order ID may preserve
+per-order sequence; an item-location key may preserve inventory sequence.
+Throughput, skew, replay, and privacy requirements also affect the choice.</p>
 <hr>
 <h1>5. Eventual Consistency</h1>
-<p>Enterprise OMS platforms rarely use distributed transactions.</p>
+<p>Distributed transactions across enterprise systems are often unavailable or
+undesirable. Designs therefore define smaller atomic boundaries and coordinate
+the rest explicitly.</p>
 <p>Instead:</p>
 <pre><code class="language-text">Customer Order
 
@@ -692,8 +704,9 @@ Inventory Updated
 
 Notification Sent
 </code></pre>
-<p>Every service reaches the correct state independently.</p>
-<p>Interview phrase:</p>
+<p>Components converge through messages, retries, reconciliation, and compensating
+work. Eventual consistency is a design obligation, not an automatic property.</p>
+<p>Design principle:</p>
 <blockquote>
 <p>Strong consistency is reserved for the smallest possible boundary.</p>
 </blockquote>
@@ -705,7 +718,8 @@ Notification Sent
 <p>Compensating actions replace distributed rollback.</p>
 <hr>
 <h1>7. CQRS</h1>
-<p>Command Query Responsibility Segregation is common.</p>
+<p>CQRS separates command and query models. It is useful when read and write
+requirements differ substantially; otherwise one model may be simpler.</p>
 <p>Commands:</p>
 <ul>
 <li>Create Order</li>
@@ -726,7 +740,7 @@ Notification Sent
 </ul>
 <hr>
 <h1>8. Idempotency</h1>
-<p>Consumers must tolerate duplicate messages.</p>
+<p>Consumers of at-least-once delivery channels must tolerate duplicate messages.</p>
 <p>Example:</p>
 <pre><code>ShipmentCreated
 
@@ -742,7 +756,7 @@ received twice
 </ul>
 <hr>
 <h1>9. API Design</h1>
-<p>Most OMS platforms expose:</p>
+<p>Common integration contract styles include:</p>
 <ul>
 <li>REST APIs</li>
 <li>Event streams</li>
@@ -767,10 +781,11 @@ GET /inventory
 <li>Store metadata</li>
 <li>Carrier schedules</li>
 </ul>
-<p>Never treat caches as the source of truth.</p>
+<p>Caches need an explicit authority, invalidation strategy, freshness objective,
+and safe behavior when they are stale or unavailable.</p>
 <hr>
 <h1>11. Observability</h1>
-<p>Minimum production telemetry:</p>
+<p>A baseline production telemetry set may include:</p>
 <p>Metrics</p>
 <ul>
 <li>Order throughput</li>
@@ -805,7 +820,8 @@ GET /inventory
 <p>Retries should be bounded and observable.</p>
 <hr>
 <h1>13. Scalability</h1>
-<p>Scale independently:</p>
+<p>Where independent services are justified, scale the constrained capability
+rather than the entire system:</p>
 <div class="mermaid-source" data-code="Zmxvd2NoYXJ0IExSCkFQSSAtLT4gT01TCk9NUyAtLT4gQVRQCk9NUyAtLT4gUm91dGluZwpPTVMgLS0+IEludmVudG9yeQoKQVRQIC0tPiBTY2FsZTFbTWFueSBSZXBsaWNhc10KUm91dGluZyAtLT4gU2NhbGUyW01hbnkgUmVwbGljYXNdCkludmVudG9yeSAtLT4gU2NhbGUzW01hbnkgUmVwbGljYXNd"></div>
 
 <p>Typical hotspots:</p>
@@ -823,7 +839,7 @@ GET /inventory
 <li>Inventory manipulation APIs</li>
 <li>Administrative routing rules</li>
 </ul>
-<p>Recommendations:</p>
+<p>Common controls to evaluate:</p>
 <ul>
 <li>OAuth2/OIDC</li>
 <li>mTLS for service-to-service traffic</li>
@@ -843,14 +859,15 @@ GET /inventory
 <ul>
 <li>OMS architecture is primarily about coordination rather than
 computation.</li>
-<li>Event-driven designs outperform tightly coupled synchronous
-workflows at enterprise scale.</li>
-<li>Sagas, idempotency, and eventual consistency are foundational
-patterns.</li>
+<li>Event-driven and synchronous interactions solve different problems; robust
+systems use deliberate boundaries between them.</li>
+<li>Sagas, idempotency, and eventual consistency are important when work spans
+independently committed systems, not requirements for every operation.</li>
 <li>Observability is a first-class requirement because failures are
 often distributed and asynchronous.</li>
-<li>The best OMS implementations optimize independently deployable
-capabilities rather than building a single monolith.</li>
+<li>Architecture should follow required scale, team ownership, change rate,
+consistency, and operational capacity rather than a default preference for
+monoliths or microservices.</li>
 </ul>
 </article>
 <article class="chapter" id="chapter-5"><h1>Order Management Systems</h1>
