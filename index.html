@@ -87,7 +87,8 @@ promises, inventory, operational cost, and fulfillment capacity in
 real time.&quot;</em></p>
 </blockquote>
 <h1>1. Why Order Management Exists</h1>
-<p>Twenty years ago, retail fulfillment was simple.</p>
+<p>Historically, many retail fulfillment networks exposed only a small
+number of fulfillment paths to each sales channel.</p>
 <pre><code class="language-text">Customer
     ↓
 Store
@@ -97,8 +98,8 @@ Store
     ↓
 Warehouse
 </code></pre>
-<p>Today, every order might be fulfilled from dozens or hundreds of
-possible locations.</p>
+<p>Modern omnichannel networks may evaluate dozens or hundreds of possible
+fulfillment locations for one order.</p>
 <pre><code class="language-text">            Vendor
 
                │
@@ -127,13 +128,13 @@ promise it to the customer?&quot;</strong></p>
 <p>That sounds like a small distinction.</p>
 <p>It isn&#39;t.</p>
 <h1>OMS is a Decision Engine</h1>
-<p>The OMS exists to make decisions:</p>
+<p>The OMS exists to answer operational questions:</p>
 <ol>
-<li>Can I sell it?</li>
-<li>Can I promise it?</li>
-<li>Where should it ship from?</li>
-<li>What happens if reality changes?</li>
-<li>How do I maximize profit?</li>
+<li>Is the item sellable in this channel and market?</li>
+<li>What promise can be made with acceptable confidence?</li>
+<li>Which node and method should fulfill the order?</li>
+<li>How should the order recover when conditions change?</li>
+<li>Which choice best balances service, cost, margin, and policy?</li>
 </ol>
 <h1>2. OMS vs WMS vs ERP vs Inventory</h1>
 <h2>ERP</h2>
@@ -175,7 +176,10 @@ quantity.</p>
 <h1>5. Real-Time Inventory</h1>
 <div class="mermaid-source" data-code="c2VxdWVuY2VEaWFncmFtCnBhcnRpY2lwYW50IFBPUwpwYXJ0aWNpcGFudCBJbnZlbnRvcnkKcGFydGljaXBhbnQgT01TCnBhcnRpY2lwYW50IFdlYnNpdGUKClBPUy0+PkludmVudG9yeTogU29sZCBJdGVtCkludmVudG9yeS0+Pk9NUzogSW52ZW50b3J5Q2hhbmdlZApPTVMtPj5XZWJzaXRlOiBBVFAgVXBkYXRlZA=="></div>
 
-<p>Inventory updates should propagate in well under one second.</p>
+<p>The required propagation time depends on channel latency, oversell risk,
+transaction volume, and the cost of stale availability. Customer-facing
+availability commonly requires near-real-time updates, while financial and
+analytical views may tolerate slower convergence.</p>
 <h1>6. Available-to-Promise (ATP)</h1>
 <p>ATP is inventory that can be confidently promised after accounting for
 reservations, safety stock, business rules, and operational constraints.</p>
